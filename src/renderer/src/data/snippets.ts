@@ -1,9 +1,9 @@
-export interface Result {
+export interface SnippetsType {
     id: number,
     content: string
 }
 
-export const data: Result[] = [
+export const snippets: SnippetsType[] = [
     {
         id: 1,
         content: "Reprehenderit ipsum labore irure laboris amet irure excepteur."
