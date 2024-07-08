@@ -21,7 +21,7 @@ const Result: React.FC<ResultProps> = ({ className, ...props }) => {
         setCurrentIndex((pre) => (pre - 1 < 0 ? snippets.length - 1 : pre - 1))
         break
       case 'Enter':
-        console.log('enter key event')
+        navigator.clipboard.writeText(snippets[currentIndex].content)
         break
     }
   }
@@ -32,7 +32,7 @@ const Result: React.FC<ResultProps> = ({ className, ...props }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyEvent)
     }
-  }, [snippets])
+  }, [snippets, currentIndex])
   return (
     <>
       {snippets && snippets.length > 0 && (
