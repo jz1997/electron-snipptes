@@ -12,3 +12,6 @@ pnpm-lock.yaml
 
 # Yarn
 yarn.lock
+
+# ignore vscode settings
+.vscode
