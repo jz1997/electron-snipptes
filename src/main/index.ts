@@ -23,6 +23,9 @@ function createWindow(): void {
     }
   })
 
+  // set transparent window ignore mouse event 
+  // mainWindow.setIgnoreMouseEvents(true, { forward: true })
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
@@ -58,6 +61,12 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.on('set-ignore-mouse-events', (event, ignore, options) => {
+    const win = BrowserWindow.fromWebContents(event.sender)
+    win?.setIgnoreMouseEvents(ignore, options)
+  })
+
 
   createWindow()
 

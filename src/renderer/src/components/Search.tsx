@@ -1,39 +1,16 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react'
+import React from 'react'
 import { Input } from './ui/input'
-import { useSnippet } from '@renderer/hooks/useSnippet'
-import { snippets as mockSnippets } from '@renderer/data/snippets'
+import { cn } from '@renderer/utils/utils'
+import useSearch from '@renderer/hooks/useSearch'
 
-interface SearchProps {}
+interface SearchProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const Search: React.FC<SearchProps> = () => {
-  const [search, setSearch] = useState('')
-  const { setSnippets } = useSnippet()
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    const value = e.target.value
-    setSearch(value)
-    if (value === undefined || value === '') {
-      setSnippets([])
-      return
-    }
-    const filteredSnippets = mockSnippets.filter(
-      (snippet) => snippet.content && snippet.content.toLowerCase().includes(value.toLowerCase())
-    )
-    setSnippets(filteredSnippets)
-  }
-
-  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      e.preventDefault()
-      return false
-    }
-    return true;
-  }
+const Search: React.FC<SearchProps> = ({ className, ...props }) => {
+  const { onKeyDown, onChange } = useSearch()
 
   return (
-    <div className={'w-full p-3 drag bg-white '}>
-      <Input onKeyDown={onKeyDown} onChange={onChange} />
+    <div className={cn('w-full p-3  bg-white ', className)} {...props}>
+      <Input className="no-drag" onKeyDown={onKeyDown} onChange={onChange} />
     </div>
   )
 }

@@ -1,24 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Result from './components/Result'
 import Search from './components/Search'
-import { SnippetsType } from './data/snippets'
-import { SnippetContext } from './context/SnippetContext'
+import { SnippetProvider } from './context/SnippetContext'
 
 function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+  const mainRef = useRef<HTMLDivElement>(null)
 
-  const [snippets, setSnippets] = useState<SnippetsType[]>([])
+  useEffect(() => {
+    mainRef.current?.addEventListener('mouseover', (e: MouseEvent) => {
+      e.stopPropagation()
+      window.electron.ipcRenderer.send('set-ignore-mouse-events', false)
+    })
+
+    document.body?.addEventListener('mouseover', (e: MouseEvent) => {
+      e.stopPropagation()
+      window.electron.ipcRenderer.send('set-ignore-mouse-events', true, { forward: true })
+    })
+  }, [])
 
   return (
     <>
-      <SnippetContext.Provider value={{ snippets, setSnippets }}>
-        <div className='w-full p-1'>
+      <SnippetProvider>
+        <main ref={mainRef} className="w-full p-1 bg-red-200">
+          <div className="drag bg-transparent h-[1rem]"></div>
           <div className="flex w-full flex-col shadow-md rounded-lg overflow-hidden">
             <Search />
             <Result className={'-mt-2'} />
           </div>
-        </div>
-      </SnippetContext.Provider>
+        </main>
+      </SnippetProvider>
     </>
   )
 }
