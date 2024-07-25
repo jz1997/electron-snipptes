@@ -3,3 +3,12 @@ dist
 out
 .DS_Store
 *.log*
+
+# lock file from npm
+package-lock.json
+
+# pnpm
+pnpm-lock.yaml
+
+# Yarn
+yarn.lock
