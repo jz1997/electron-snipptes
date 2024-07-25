@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import Result from './components/Result'
 import Search from './components/Search'
 import { SnippetProvider } from './context/SnippetContext'
+import { Toaster } from './components/ui/toaster'
 
 function App(): JSX.Element {
   const mainRef = useRef<HTMLDivElement>(null)
@@ -29,6 +30,8 @@ function App(): JSX.Element {
           </div>
         </main>
       </SnippetProvider>
+
+      <Toaster />
     </>
   )
 }

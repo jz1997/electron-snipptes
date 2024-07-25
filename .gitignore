@@ -15,3 +15,7 @@ yarn.lock
 
 # ignore vscode settings
 .vscode
+
+
+# ignore vscode
+.vscode
