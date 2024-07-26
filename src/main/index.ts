@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
+import { app, shell, BrowserWindow, screen } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import "./ipc"
 
 function createWindow(): void {
   const { width } = screen.getPrimaryDisplay().workAreaSize
@@ -58,15 +59,6 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
-
-  ipcMain.on('set-ignore-mouse-events', (event, ignore, options) => {
-    const win = BrowserWindow.fromWebContents(event.sender)
-    win?.setIgnoreMouseEvents(ignore, options)
-  })
-
 
   createWindow()
 

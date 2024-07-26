@@ -6,18 +6,11 @@ import { ResultItemType } from "@renderer/components/ResultItem"
 export default () => {
     const { snippets } = useSnippet()
     const [currentIndex, setCurrentIndex] = useState(0)
-    const { toast } = useToast()
 
     const copyToClipboard = (result: ResultItemType) => {
-        if (!result || !result.content) {
-            toast({
-                title: '系统提示',
-                duration: 1000,
-                description: '无效的内容'
-            })
-        }
         navigator.clipboard.writeText(result.content)
-        toast({ title: '系统提示', duration: 500, description: '已复制' })
+        // close window
+        window.api.hideWindow()
     }
 
     const handleKeyEvent = (e: KeyboardEvent) => {
