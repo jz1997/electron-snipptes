@@ -1,50 +1,7 @@
-import { app, shell, BrowserWindow, screen } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
-import "./ipc"
+import { app, BrowserWindow } from 'electron'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { createWindow } from "./code"
 
-function createWindow(): void {
-  const { width } = screen.getPrimaryDisplay().workAreaSize
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 600,
-    // height: 600,
-    // x: width - 600,
-    // y: 50,
-    show: false,
-    frame: false,
-    transparent: true,
-    alwaysOnTop: true,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
-    }
-  })
-
-  // set transparent window ignore mouse event 
-  // mainWindow.setIgnoreMouseEvents(true, { forward: true })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-  })
-
-  mainWindow.webContents.openDevTools()
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
-}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
