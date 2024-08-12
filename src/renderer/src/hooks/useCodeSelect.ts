@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { useSnippet } from "./useSnippet"
-import { useToast } from "@renderer/components/ui/use-toast"
 import { ResultItemType } from "@renderer/components/ResultItem"
+import { ResultProps } from "@renderer/components/Result"
 
-export default () => {
-    const { snippets } = useSnippet()
+export default (props: ResultProps) => {
+    const { snippets, setSearchValue } = useSnippet()
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const copyToClipboard = (result: ResultItemType) => {
@@ -26,16 +26,20 @@ export default () => {
                 break
             case 'Enter':
                 copyToClipboard(snippets[currentIndex])
+                setSearchValue("")
                 break
         }
     }
 
+    // 鼠标选中
     const handleMouseSelect = (result: ResultItemType, index: number) => {
         setCurrentIndex(index)
         copyToClipboard(result)
+        setSearchValue("")
     }
 
 
+    // 方向键选中
     useEffect(() => {
         document.addEventListener('keydown', handleKeyEvent)
         // clear keyboard event

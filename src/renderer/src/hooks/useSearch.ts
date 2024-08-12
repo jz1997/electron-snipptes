@@ -1,16 +1,15 @@
-import { ChangeEvent, useState, KeyboardEvent } from "react"
+import { ChangeEvent, KeyboardEvent } from "react"
 import { useSnippet } from "./useSnippet"
 import { snippets as mockSnippets } from '@renderer/data/snippets'
 
 
 export default () => {
-    const [search, setSearch] = useState('')
-    const { setSnippets } = useSnippet()
+    const { searchValue, setSearchValue, setSnippets } = useSnippet()
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         const value = e.target.value
-        setSearch(value)
+        setSearchValue(value)
         if (value === undefined || value === '') {
             setSnippets([])
             return
@@ -32,6 +31,6 @@ export default () => {
     return {
         onKeyDown,
         onChange,
-        search
+        searchValue
     }
 }

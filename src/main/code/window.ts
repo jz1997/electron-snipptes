@@ -1,17 +1,17 @@
 import { BrowserWindow, screen, shell } from "electron"
 import icon from "../../../resources/icon.png?asset"
-import * as ipc from "./ipc"
 import { join } from "path"
 import { is } from "@electron-toolkit/utils"
 
-export function createWindow(): void {
-    const { width } = screen.getPrimaryDisplay().workAreaSize
+// 创建 window
+export function createWindow(): BrowserWindow {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
       width: 600,
       // height: 600,
       // x: width - 600,
       // y: 50,
+      center: true,
       show: false,
       frame: false,
       transparent: true,
@@ -30,10 +30,7 @@ export function createWindow(): void {
     mainWindow.on('ready-to-show', () => {
       mainWindow.show()
     })
-  
-    // 注册 ipc 消息
-    ipc.registerIpc(mainWindow)
-    
+
     mainWindow.webContents.openDevTools()
     mainWindow.webContents.setWindowOpenHandler((details) => {
       shell.openExternal(details.url)
@@ -47,4 +44,6 @@ export function createWindow(): void {
     } else {
       mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
+
+    return mainWindow
   }

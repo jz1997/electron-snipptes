@@ -4,11 +4,15 @@ import { createContext, Dispatch, SetStateAction, useState } from 'react'
 export interface SnippetContextProps {
   snippets: SnippetsType[]
   setSnippets: Dispatch<SetStateAction<SnippetsType[]>>
+  searchValue: string
+  setSearchValue: Dispatch<SetStateAction<string>>
 }
 
 export const SnippetContext = createContext<SnippetContextProps>({
   snippets: [],
-  setSnippets: () => {}
+  searchValue: '',
+  setSnippets: () => {},
+  setSearchValue: () => {}
 })
 
 interface Props {
@@ -17,7 +21,8 @@ interface Props {
 
 export const SnippetProvider = ({ children }: Props) => {
   const [snippets, setSnippets] = useState<SnippetsType[]>([])
+  const [searchValue, setSearchValue] = useState<string>('')
   return (
-    <SnippetContext.Provider value={{ snippets, setSnippets }}>{children}</SnippetContext.Provider>
+    <SnippetContext.Provider value={{ snippets, setSnippets, searchValue, setSearchValue }}>{children}</SnippetContext.Provider>
   )
 }
