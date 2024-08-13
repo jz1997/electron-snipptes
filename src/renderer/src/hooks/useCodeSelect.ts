@@ -4,13 +4,15 @@ import { ResultItemType } from "@renderer/components/ResultItem"
 import { ResultProps } from "@renderer/components/Result"
 
 export default (props: ResultProps) => {
-    const { snippets, setSearchValue } = useSnippet()
+    const { snippets, setSnippets, setSearchValue, searchValue } = useSnippet()
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const copyToClipboard = (result: ResultItemType) => {
-        navigator.clipboard.writeText(result.content)
-        // close window
-        window.api.hideWindow()
+        navigator.clipboard.writeText(result.content).then(() => {
+            // close window
+            window.api.hideWindow()
+        })
+
     }
 
     const handleKeyEvent = (e: KeyboardEvent) => {
@@ -26,6 +28,7 @@ export default (props: ResultProps) => {
                 break
             case 'Enter':
                 copyToClipboard(snippets[currentIndex])
+                setSnippets([])
                 setSearchValue("")
                 break
         }
@@ -35,6 +38,7 @@ export default (props: ResultProps) => {
     const handleMouseSelect = (result: ResultItemType, index: number) => {
         setCurrentIndex(index)
         copyToClipboard(result)
+        setSnippets([])
         setSearchValue("")
     }
 
@@ -54,6 +58,9 @@ export default (props: ResultProps) => {
 
 
     return {
-        snippets, currentIndex, handleMouseSelect
+        snippets, 
+        currentIndex, 
+        handleMouseSelect,
+        searchValue
     }
 }
