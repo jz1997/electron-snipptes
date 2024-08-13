@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { useSnippet } from "./useSnippet"
 import { ResultItemType } from "@renderer/components/ResultItem"
-import { ResultProps } from "@renderer/components/Result"
 
-export default (props: ResultProps) => {
+export default () => {
     const { snippets, setSnippets, setSearchValue, searchValue } = useSnippet()
     const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -12,7 +11,13 @@ export default (props: ResultProps) => {
             // close window
             window.api.hideWindow()
         })
+        afterSelect()
+    }
 
+    const afterSelect = () => {
+        setSnippets([])
+        setCurrentIndex(0)
+        setSearchValue("")
     }
 
     const handleKeyEvent = (e: KeyboardEvent) => {
@@ -28,8 +33,6 @@ export default (props: ResultProps) => {
                 break
             case 'Enter':
                 copyToClipboard(snippets[currentIndex])
-                setSnippets([])
-                setSearchValue("")
                 break
         }
     }
@@ -38,8 +41,6 @@ export default (props: ResultProps) => {
     const handleMouseSelect = (result: ResultItemType, index: number) => {
         setCurrentIndex(index)
         copyToClipboard(result)
-        setSnippets([])
-        setSearchValue("")
     }
 
 
@@ -58,8 +59,8 @@ export default (props: ResultProps) => {
 
 
     return {
-        snippets, 
-        currentIndex, 
+        snippets,
+        currentIndex,
         handleMouseSelect,
         searchValue
     }

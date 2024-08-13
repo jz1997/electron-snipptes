@@ -2,14 +2,12 @@ import { cn } from '@renderer/utils/utils'
 import React from 'react'
 import ResultItem from './ResultItem'
 import useCodeSelect from '@renderer/hooks/useCodeSelect'
-import { SnippetsType } from '@renderer/data/snippets'
 
 export interface ResultProps extends React.HTMLAttributes<HTMLDivElement> {
-  onResultSelect?: (result: SnippetsType) => void;
 }
 
 const Result: React.FC<ResultProps> = ({ className, ...props }) => {
-  const { snippets, currentIndex, handleMouseSelect } = useCodeSelect(props)
+  const { snippets, currentIndex, handleMouseSelect } = useCodeSelect()
 
   return (
     <>
