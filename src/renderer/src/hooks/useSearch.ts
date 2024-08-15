@@ -1,23 +1,29 @@
 import { ChangeEvent, KeyboardEvent } from "react"
-import { useSnippet } from "./useSnippet"
 import { snippets as mockSnippets } from '@renderer/data/snippets'
+import { useStore } from "@renderer/store"
 
 
 export default () => {
-    const { searchValue, setSearchValue, setSnippets } = useSnippet()
+    const setResult = useStore(state => state.setResult)
+    const { searchValue, setSearchValue } = useStore(state => {
+        return {
+            searchValue: state.searchValue,
+            setSearchValue: state.setSearchValue
+        }
+    })
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         const value = e.target.value
         setSearchValue(value)
         if (value === undefined || value === '') {
-            setSnippets([])
+            setResult([])
             return
         }
         const filteredSnippets = mockSnippets.filter(
             (snippet) => snippet.content && snippet.content.toLowerCase().includes(value.toLowerCase())
         )
-        setSnippets(filteredSnippets)
+        setResult(filteredSnippets)
     }
 
     const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

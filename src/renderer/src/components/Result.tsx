@@ -7,13 +7,13 @@ export interface ResultProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Result: React.FC<ResultProps> = ({ className, ...props }) => {
-  const { snippets, currentIndex, handleMouseSelect } = useCodeSelect()
+  const { result, currentIndex, handleMouseSelect } = useCodeSelect()
 
   return (
     <>
-      {snippets && snippets.length > 0 && (
+      {result && result.length > 0 && (
         <div className={cn('w-full p-3 bg-white  text-slate-700 text-base', className)} {...props}>
-          {snippets.map((item, index) => {
+          {result.map((item, index) => {
             return (
               <ResultItem
                 onClick={item => handleMouseSelect(item, index)}

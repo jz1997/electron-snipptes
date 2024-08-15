@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react"
-import { useSnippet } from "./useSnippet"
 import { ResultItemType } from "@renderer/components/ResultItem"
+import { useStore } from "@renderer/store"
 
 export default () => {
-    const { snippets, setSnippets, setSearchValue, searchValue } = useSnippet()
     const [currentIndex, setCurrentIndex] = useState(0)
+    const { result, setResult, searchValue, setSearchValue } = useStore(state => {
+        return {
+            result: state.result,
+            setResult: state.setResult,
+            searchValue: state.searchValue,
+            setSearchValue: state.setSearchValue
+        }
+    })
 
     const copyToClipboard = (result: ResultItemType) => {
         navigator.clipboard.writeText(result.content).then(() => {
@@ -15,24 +22,28 @@ export default () => {
     }
 
     const afterSelect = () => {
-        setSnippets([])
+        setResult([])
         setCurrentIndex(0)
         setSearchValue("")
     }
 
     const handleKeyEvent = (e: KeyboardEvent) => {
-        if (snippets.length == 0) {
+        if (!result || result.length == 0) {
             return
         }
         switch (e.code) {
             case 'ArrowDown':
-                setCurrentIndex((pre) => (pre + 1 > snippets.length - 1 ? 0 : pre + 1))
+                setCurrentIndex((pre) => (pre + 1 > result.length - 1 ? 0 : pre + 1))
                 break
             case 'ArrowUp':
-                setCurrentIndex((pre) => (pre - 1 < 0 ? snippets.length - 1 : pre - 1))
+                setCurrentIndex((pre) => (pre - 1 < 0 ? result.length - 1 : pre - 1))
                 break
             case 'Enter':
-                copyToClipboard(snippets[currentIndex])
+                copyToClipboard(result[currentIndex])
+                break
+            case 'Escape':
+                setSearchValue("")
+                setResult([])
                 break
         }
     }
@@ -51,15 +62,15 @@ export default () => {
         return () => {
             document.removeEventListener('keydown', handleKeyEvent)
         }
-    }, [snippets, currentIndex])
+    }, [result, currentIndex])
 
     useEffect(() => {
         setCurrentIndex(0)
-    }, [snippets])
+    }, [result])
 
 
     return {
-        snippets,
+        result,
         currentIndex,
         handleMouseSelect,
         searchValue
