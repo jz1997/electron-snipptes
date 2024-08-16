@@ -1,7 +1,8 @@
-import { BrowserWindow, dialog } from "electron";
+import { BrowserWindow, dialog, Event, Input } from "electron";
 import { app, globalShortcut } from 'electron'
 
 export const registerShortcut = (win: BrowserWindow) => {
+    // 注册全局快捷键
     const ret = globalShortcut.register('CommandOrControl+Shift+.', () => {
         win.show();
     })
@@ -14,5 +15,12 @@ export const registerShortcut = (win: BrowserWindow) => {
     app.on('will-quit', () => {
         // Unregister all shortcuts.
         globalShortcut.unregisterAll()
+    })
+
+    // 监听快捷键事件
+    win.webContents.on('before-input-event', (event: Event, input: Input) => {
+        if (input.type === "KeyDown" && input.key === 'Escape') {
+            win.hide()
+        }
     })
 }

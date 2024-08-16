@@ -2,7 +2,6 @@ import { app } from 'electron';
 import { createWindow } from './window';
 import { registerIpc } from "./ipc"
 import { registerShortcut } from './shortcut';
-import { registerWinEvent } from './registerWinEvent';
 
 app.whenReady().then(() => {
     const mainWindow = createWindow()
@@ -12,7 +11,4 @@ app.whenReady().then(() => {
 
     // 注册快捷键
     registerShortcut(mainWindow)
-
-    // 注册mainwindow 事件
-    registerWinEvent(mainWindow)
 })

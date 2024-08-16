@@ -41,7 +41,7 @@ export default () => {
             case 'Enter':
                 copyToClipboard(result[currentIndex])
                 break
-            case 'Escape':
+            case 'Escape ':
                 setSearchValue("")
                 setResult([])
                 break

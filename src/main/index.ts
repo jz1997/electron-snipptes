@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { createWindow } from './code/window'
-import "./code/index";
+import { createWindow } from './win/window'
+import "./win/index";
 
 
 // This method will be called when Electron has finished
