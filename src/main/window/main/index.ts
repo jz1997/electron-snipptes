@@ -1,7 +1,7 @@
 import { app } from 'electron';
 import { createWindow } from './window';
 import { registerIpc } from "./ipc"
-import { registerShortcut } from './shortcut';
+import { registerKeymap } from './keymap';
 
 app.whenReady().then(() => {
     const mainWindow = createWindow()
@@ -10,5 +10,5 @@ app.whenReady().then(() => {
     registerIpc(mainWindow)
 
     // 注册快捷键
-    registerShortcut(mainWindow)
+    registerKeymap(mainWindow)
 })
