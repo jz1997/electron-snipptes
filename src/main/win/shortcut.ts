@@ -4,7 +4,11 @@ import { app, globalShortcut } from 'electron'
 export const registerShortcut = (win: BrowserWindow) => {
     // 注册全局快捷键
     const ret = globalShortcut.register('CommandOrControl+Shift+.', () => {
-        win.show();
+        if (win.isVisible()) { 
+            win.hide();
+        } else { 
+            win.show();
+        }
     })
 
     if (!ret) {
@@ -13,7 +17,7 @@ export const registerShortcut = (win: BrowserWindow) => {
     }
 
     app.on('will-quit', () => {
-        // Unregister all shortcuts.
+        // 取消全局快捷键注册
         globalShortcut.unregisterAll()
     })
 
