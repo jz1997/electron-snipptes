@@ -76,6 +76,10 @@
 //     }
 // }
 
+* { 
+  opacity: 0.98;
+}
+
 body {
   @apply w-screen h-screen;
 }

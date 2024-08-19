@@ -6,7 +6,7 @@ declare global {
     electron: ElectronAPI
     api: { 
       hideWindow: () => void,
-      registerKeymap: (keymapType: KeymapType, keymap: string) => void,
+      registerKeymap: (keymapType: KeymapType, keymap: string) => Promise<boolean>,
     }
   }
 }

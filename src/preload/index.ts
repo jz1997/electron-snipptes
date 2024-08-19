@@ -1,14 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { KeymapType } from '@main/config/keymap'
+import { KeymapType } from '@main/manager/keymap'
 
 // Custom APIs for renderer
 const api = {
   hideWindow: () => {
     ipcRenderer.send('hide-window')
   },
-  registerShortcut: (keymapType: KeymapType, keymap: string) => {
-    ipcRenderer.send("register-keymap", keymapType, keymap)
+  registerKeymap: (keymapType: KeymapType, keymap: string): Promise<boolean> => {
+    return ipcRenderer.invoke("register-keymap", keymapType, keymap)
   }
 }
 
