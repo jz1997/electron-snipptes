@@ -3,8 +3,7 @@ import React from 'react'
 import ResultItem from './ResultItem'
 import useCodeSelect from '@renderer/hooks/useCodeSelect'
 
-export interface ResultProps extends React.HTMLAttributes<HTMLDivElement> {
-}
+export interface ResultProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const Result: React.FC<ResultProps> = ({ className, ...props }) => {
   const { result, currentIndex, handleMouseSelect } = useCodeSelect()
@@ -16,7 +15,7 @@ const Result: React.FC<ResultProps> = ({ className, ...props }) => {
           {result.map((item, index) => {
             return (
               <ResultItem
-                onClick={item => handleMouseSelect(item, index)}
+                onClick={(item) => handleMouseSelect(item, index)}
                 isActive={currentIndex === index}
                 key={index}
                 item={item}

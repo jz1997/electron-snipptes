@@ -4,9 +4,10 @@ import { KeymapType } from '@main/config/keymap'
 declare global {
   interface Window {
     electron: ElectronAPI
-    api: { 
-      hideWindow: () => void,
-      registerKeymap: (keymapType: KeymapType, keymap: string) => Promise<boolean>,
+    api: {
+      hideWindow: () => void
+      registerKeymap: (keymapType: KeymapType, keymap: string) => Promise<boolean>
+      openConfigWindow: () => void
     }
   }
 }

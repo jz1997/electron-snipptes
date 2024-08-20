@@ -9,7 +9,7 @@ import { KeymapType } from '@main/manager/keymap'
 function App(): JSX.Element {
   const mainRef = useRef<HTMLDivElement>(null)
   const { register } = useKeymap()
-  useEffect(() => { 
+  useEffect(() => {
     register(KeymapType.SHOW_HIDE_WINDOW, 'CommandOrControl+Shift+;')
   }, [])
 

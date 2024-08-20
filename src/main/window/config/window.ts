@@ -1,21 +1,21 @@
 import { BrowserWindow, shell } from 'electron'
+import { join } from 'path'
 // @ts-ignore
 import icon from '../../../../resources/icon.png?asset'
-import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
 // 创建 window
 export function createWindow(): BrowserWindow {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 600,
-    // height: 600,
+    width: 800,
+    height: 500,
     // x: width - 600,
     // y: 50,
     center: true,
     show: false,
-    frame: false,
-    transparent: true,
+    // frame: false,
+    // transparent: true,
     alwaysOnTop: true,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -32,9 +32,11 @@ export function createWindow(): BrowserWindow {
     mainWindow.show()
   })
 
+  // dev 环境开启调试工具
   if (is.dev) {
     mainWindow.webContents.openDevTools()
   }
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }

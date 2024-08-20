@@ -8,7 +8,10 @@ const api = {
     ipcRenderer.send('hide-window')
   },
   registerKeymap: (keymapType: KeymapType, keymap: string): Promise<boolean> => {
-    return ipcRenderer.invoke("register-keymap", keymapType, keymap)
+    return ipcRenderer.invoke('register-keymap', keymapType, keymap)
+  },
+  openConfigWindow: () => {
+    ipcRenderer.send('open-config-window')
   }
 }
 
