@@ -3,7 +3,7 @@ import { join } from 'path'
 // @ts-ignore
 import icon from '../../../../resources/icon.png?asset'
 import { is } from '@electron-toolkit/utils'
-
+import url from 'node:url'
 // 创建 window
 export function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -45,9 +45,16 @@ export function createWindow(): BrowserWindow {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '#/config')
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadURL(
+      url.format({
+        pathname: join(__dirname, '../renderer/index.html'),
+        protocol: 'file:',
+        slashes: true,
+        hash: 'config'
+      })
+    )
   }
 
   return mainWindow

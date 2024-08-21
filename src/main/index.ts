@@ -2,6 +2,7 @@ import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createWindow } from './window/main/window'
 import './window/main/index'
+import './db'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')
