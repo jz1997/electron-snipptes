@@ -12,6 +12,9 @@ const api = {
   },
   openConfigWindow: () => {
     ipcRenderer.send('open-config-window')
+  },
+  findAllCategory: (params?: Map<string, any>) => {
+    return ipcRenderer.invoke('find-all-category', params ? params : new Map<string, any>())
   }
 }
 

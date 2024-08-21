@@ -4,12 +4,13 @@ import { join } from 'path'
 import icon from '../../../../resources/icon.png?asset'
 import { is } from '@electron-toolkit/utils'
 import url from 'node:url'
+
 // 创建 window
 export function createWindow(): BrowserWindow {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 500,
+    width: 1000,
+    height: 600,
     // x: width - 600,
     // y: 50,
     center: true,
