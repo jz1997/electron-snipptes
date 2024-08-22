@@ -2,8 +2,11 @@ import { useStore } from '@renderer/store'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
+import { cn } from '@renderer/utils/utils'
 
-export default function Error() {
+export interface ErrorProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export default function Error({ className, ...props }: ErrorProps) {
   const { error, setError } = useStore((state) => {
     return {
       error: state.error,
@@ -21,7 +24,7 @@ export default function Error() {
 
   if (error && error !== '') {
     return (
-      <div className="bg-white p-3">
+      <div className={cn('bg-white p-3', className)} {...props}>
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>错误提示</AlertTitle>

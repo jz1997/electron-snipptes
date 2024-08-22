@@ -18,6 +18,7 @@ export function createWindow(): BrowserWindow {
     transparent: true,
     alwaysOnTop: true,
     autoHideMenuBar: true,
+    resizable: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

@@ -13,23 +13,33 @@ function Home(): JSX.Element {
     register(KeymapType.SHOW_HIDE_WINDOW, 'CommandOrControl+Shift+;')
   }, [])
 
+  const rootMouseEnter = (e: MouseEvent) => {
+    e.stopPropagation()
+    // 取消鼠标穿透
+    window.electron.ipcRenderer.send('set-ignore-mouse-events', false)
+    console.log('mouseover main')
+  }
+
+  const rootMouseLeave = (e: MouseEvent) => {
+    e.stopPropagation()
+    // 设置鼠标穿透
+    window.electron.ipcRenderer.send('set-ignore-mouse-events', true, { forward: true })
+    console.log('mouseleave main')
+  }
+
   useEffect(() => {
-    mainRef.current?.addEventListener('mouseover', (e: MouseEvent) => {
-      e.stopPropagation()
-      // 取消鼠标穿透
-      window.electron.ipcRenderer.send('set-ignore-mouse-events', false)
-    })
-    document.body?.addEventListener('mouseover', (e: MouseEvent) => {
-      e.stopPropagation()
-      // 设置鼠标穿透
-      window.electron.ipcRenderer.send('set-ignore-mouse-events', true, { forward: true })
-    })
+    document.getElementById('root')?.addEventListener('mouseenter', rootMouseEnter)
+    document.getElementById('root')?.addEventListener('mouseleave', rootMouseLeave)
+
+    return () => {
+      document.getElementById('root')?.removeEventListener('mouseenter', rootMouseEnter)
+      document.getElementById('root')?.removeEventListener('mouseleave', rootMouseLeave)
+    }
   }, [])
 
   return (
     <>
       <main ref={mainRef} className="w-full p-2">
-        <div className="drag bg-transparent h-[1rem]"></div>
         <div className="flex w-full flex-col shadow-md border border-gray-300 rounded-lg overflow-hidden">
           <Error />
           <Search />
