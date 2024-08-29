@@ -2,33 +2,42 @@ import { Category } from '@main/db/entites/category'
 import CategoryList from '@renderer/components/CategoryList'
 import SnippetList from '@renderer/components/SnippetList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/components/ui/tabs'
-import { snippets } from '@renderer/data/snippets'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Toaster } from '@renderer/components/ui/toaster'
+import useCategory from '@renderer/hooks/useCategory'
+import useContent from '@renderer/hooks/useContent'
+import { useEffect } from 'react'
 
 // Config Page
 export default function Config() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const navigate = useNavigate()
+  const {
+    categories,
+    getCategories,
+    activeId,
+    setActiveId,
+    onSearchChange,
+    addCategory,
+    editCategory,
+    deleteCategory
+  } = useCategory()
+
+  const {
+    contents,
+    updateCateoryParamsAndFetch,
+    getContents,
+    onSearch: onSearchContent,
+    onAddContent,
+    onEditContent,
+    onRemoveContent
+  } = useContent()
 
   useEffect(() => {
     getCategories()
+    getContents()
   }, [])
 
-  const getCategories = (params?: Map<string, any>) => {
-    window.api.findAllCategory(params).then((data) => {
-      setCategories(data || [])
-    })
-  }
-
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value
-    const params = new Map<string, any>([['name', val]])
-    getCategories(params)
-  }
-
-  const addCategory = () => {
-    navigate('/config/category/add')
+  const onCategoryClick = (c: Category) => {
+    setActiveId(c.id)
+    updateCateoryParamsAndFetch(c.id)
   }
 
   return (
@@ -44,16 +53,30 @@ export default function Config() {
         <TabsContent className="w-full flex-1 h-0" value="content">
           <div className="flex flex-row w-full h-full  justify-between gap-x-2">
             <CategoryList
-              className="w-48 flex shrink-0"
+              showAll={true}
+              className="w-64 flex shrink-0"
+              activeId={activeId}
               categories={categories}
+              onCategoryClick={onCategoryClick}
               onSearchChange={onSearchChange}
               onAddClick={addCategory}
+              onEditClick={editCategory}
+              onDeleteClick={deleteCategory}
             />
-            <SnippetList className="flex-1 h-full w-full" snippets={snippets} />
+            <SnippetList
+              className="flex-1 h-full w-full"
+              contents={contents}
+              onSearch={onSearchContent}
+              onDeleteClick={onRemoveContent}
+              onAddClick={onAddContent}
+              onEditClick={onEditContent}
+            />
           </div>
         </TabsContent>
         <TabsContent value="shortcut">Change your password here.</TabsContent>
       </Tabs>
+
+      <Toaster />
     </div>
   )
 }

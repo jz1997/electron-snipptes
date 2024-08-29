@@ -1,7 +1,7 @@
 export interface Category {
-  id: number
+  id: number | bigint
   name: string
-  createAt: Date
+  createAt?: Date
 }
 
 export const mapCategory = (row: any): Category => {

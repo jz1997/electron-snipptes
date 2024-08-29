@@ -21,10 +21,29 @@ const findAll = (params: Map<string, any>): Category[] => {
 
     sql += ` where ${condition.join(' and ')}`
   }
-  console.log(sql)
   const statement: Statement = db.prepare(sql)
   const rows = statement.all(values)
   return mapCategories(rows)
 }
 
-export default { findAll }
+// 添加分类
+const insert = (category: Category): boolean => {
+  const statement: Statement = db.prepare(`insert into categories (name) values (?)`)
+  const info = statement.run(category.name)
+  return info.changes > 0
+}
+
+const update = (category: Category): boolean => {
+  const statement: Statement = db.prepare(`update categories set name = ? where id = ?`)
+  const info = statement.run(category.name, category.id)
+  return info.changes > 0
+}
+
+// 删除分类
+const remove = (id: number | bigint): boolean => {
+  const statement: Statement = db.prepare(`delete from categories where id = ?`)
+  const info = statement.run(id)
+  return info.changes > 0
+}
+
+export default { findAll, insert, update, remove }

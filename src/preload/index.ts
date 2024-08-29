@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { KeymapType } from '@main/manager/keymap'
+import { Category } from '@main/db/entites/category'
+import { Content } from '@main/db/entites/content'
 
 // Custom APIs for renderer
 const api = {
@@ -15,6 +17,30 @@ const api = {
   },
   findAllCategory: (params?: Map<string, any>) => {
     return ipcRenderer.invoke('find-all-category', params ? params : new Map<string, any>())
+  },
+  insertCategory: (category: Category) => {
+    return ipcRenderer.invoke('insert-category', category)
+  },
+  updateCategory: (category: Category) => {
+    return ipcRenderer.invoke('update-category', category)
+  },
+  removeCategory: (id: number | bigint) => {
+    return ipcRenderer.invoke('remove-category', id)
+  },
+  findAllContent: (params?: Map<string, any>) => {
+    return ipcRenderer.invoke('find-all-content', params ? params : new Map<string, any>())
+  },
+  findContentById: (id: number | bigint) => {
+    return ipcRenderer.invoke('find-content-by-id', id)
+  },
+  insertContent: (content: Content) => {
+    return ipcRenderer.invoke('insert-content', content)
+  },
+  removeContent: (id: number | bigint) => {
+    return ipcRenderer.invoke('remove-content', id)
+  },
+  updateContent: (content: Content) => {
+    return ipcRenderer.invoke('update-content', content)
   }
 }
 

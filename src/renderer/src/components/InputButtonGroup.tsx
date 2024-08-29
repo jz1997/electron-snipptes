@@ -14,7 +14,7 @@ export default function InputButtonGroup({
 }: InputButtonGroupProps) {
   return (
     <div className="w-full flex flex-row justify-between items-center gap-x-2 shrink-0">
-      <Input placeholder="Search" className="h-10" onChange={onInputChange}></Input>
+      <Input placeholder="Search" className="h-10" onInput={onInputChange}></Input>
       <Button size="sm" onClick={onButtonClick}>
         <PlusIcon />
       </Button>

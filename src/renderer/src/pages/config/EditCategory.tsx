@@ -4,17 +4,18 @@ import { Result } from '@main/db/entites/common'
 import CategoryForm from '@renderer/components/CategoryForm'
 import useMessage from '@renderer/hooks/useMessage'
 
-export default function AddCategory() {
+export default function EditCategory() {
   const { successMsg, errorMsg } = useMessage()
+
   function onSubmit(values: any) {
     const category: Category = {
       ...values
     }
-    window.api.insertCategory(category).then((result: Result<boolean>) => {
+    window.api.updateCategory(category).then((result: Result<boolean>) => {
       if (result.success) {
-        successMsg({ description: '添加分类成功' })
+        successMsg({ description: '更新分类成功' })
       } else {
-        errorMsg({ description: result.message || '添加分类失败' })
+        errorMsg({ description: result.message || '更新分类失败' })
       }
     })
   }

@@ -1,19 +1,20 @@
 import React from 'react'
 import { ScrollArea } from './ui/scroll-area'
-import { snippets, SnippetsType } from '@renderer/data/snippets'
-import { DeleteOne, Editor } from '@icon-park/react'
 import { cn } from '@renderer/utils/utils'
 import InputButtonGroup from './InputButtonGroup'
+import OperationDropMenu from './OperationDropMenu'
+import { Content } from '@main/db/entites/content'
 
 export interface SnippetListProps extends React.HTMLAttributes<HTMLDivElement> {
-  snippets: SnippetsType[]
+  contents: Content[]
   onSearch?: (e: React.ChangeEvent<HTMLInputElement>) => void
   onAddClick?: () => void
-  onEditClick?: () => void
-  onDeleteClick?: () => void
+  onEditClick?: (c: Content) => void
+  onDeleteClick?: (c: Content) => void
 }
 
 export default function SnippetList({
+  contents = [],
   onSearch = (_e) => {},
   onAddClick = () => {},
   onEditClick = () => {},
@@ -25,9 +26,9 @@ export default function SnippetList({
     <div className={cn('flex flex-col gap-y-2 border rounded-md p-2', className)} {...props}>
       <InputButtonGroup onInputChange={onSearch} onButtonClick={onAddClick} />
 
-      <ScrollArea className="shrink-0 w-full rounded-md border">
+      <ScrollArea className="shrink-0 w-full rounded-md border flex-1">
         <div className="w-full p-4">
-          {snippets.map((snippet) => (
+          {contents.map((snippet) => (
             <div
               className="w-full flex flex-row justify-between items-center gap-x-2"
               key={'category_' + snippet.id}
@@ -36,19 +37,9 @@ export default function SnippetList({
                 <span className="truncate">{snippet.title}</span>
               </div>
               <div className="flex flex-row justify-between items-center shrink-0">
-                <Editor
-                  theme="outline"
-                  size="18"
-                  fill="#333"
-                  className="cursor-pointer hover:bg-slate-200 rounded-md p-2"
-                  onClick={onEditClick}
-                />
-                <DeleteOne
-                  theme="outline"
-                  size="18"
-                  fill="red"
-                  className="cursor-pointer hover:bg-slate-200 rounded-md p-2"
-                  onClick={onDeleteClick}
+                <OperationDropMenu
+                  onEditClick={() => onEditClick(snippet)}
+                  onDeleteClick={() => onDeleteClick(snippet)}
                 />
               </div>
             </div>

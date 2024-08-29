@@ -18,7 +18,7 @@ const Search: React.FC<SearchProps> = ({ className, ...props }) => {
     >
       <Input
         value={searchValue}
-        className="no-drag focus-visible:ring-slate-200 h-8"
+        className="no-drag"
         onKeyDown={onKeyDown}
         onChange={onChange}
         autoFocus={true}
