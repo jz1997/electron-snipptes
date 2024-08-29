@@ -35,12 +35,10 @@ export default () => {
   const updateCateoryParamsAndFetch = (categoryId?: number | bigint) => {
     if (categoryId && categoryId >= 0) {
       setParams({ ...params, categoryId }, (currentParams: ContentParams) => {
-        console.log(currentParams)
         getContentWithParams(currentParams)
       })
     } else {
       setParams({ ...params, categoryId: undefined }, (currentParams: ContentParams) => {
-        console.log(currentParams)
         getContentWithParams(currentParams)
       })
     }
