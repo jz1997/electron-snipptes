@@ -3,6 +3,7 @@ import { Toaster } from '@renderer/components/ui/toaster'
 import { Result } from '@main/db/entites/common'
 import CategoryForm from '@renderer/components/CategoryForm'
 import useMessage from '@renderer/hooks/useMessage'
+import HeaderBar from '@renderer/components/HeaderBar'
 
 export default function AddCategory() {
   const { successMsg, errorMsg } = useMessage()
@@ -20,11 +21,14 @@ export default function AddCategory() {
   }
 
   return (
-    <div className="p-4">
-      <CategoryForm onSubmit={onSubmit} />
+    <>
+      <HeaderBar title='添加分类' />
+      <div className="p-4">
+        <CategoryForm onSubmit={onSubmit} />
 
-      {/* Toast */}
-      <Toaster />
-    </div>
+        {/* Toast */}
+        <Toaster />
+      </div>
+    </>
   )
 }

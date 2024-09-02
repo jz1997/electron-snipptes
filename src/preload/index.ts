@@ -18,6 +18,9 @@ const api = {
   findAllCategory: (params?: Map<string, any>) => {
     return ipcRenderer.invoke('find-all-category', params ? params : new Map<string, any>())
   },
+  findCategoryById: (id: number | bigint) => {
+    return ipcRenderer.invoke('find-category-by-id', id)
+  },
   insertCategory: (category: Category) => {
     return ipcRenderer.invoke('insert-category', category)
   },

@@ -12,7 +12,7 @@ export const mapContent = (row: any): Content => {
     categoryId: row.category_id,
     title: row.title,
     content: row.content,
-    createAt: row.create_at
+    createAt: row.created_at
   } as Content
 }
 

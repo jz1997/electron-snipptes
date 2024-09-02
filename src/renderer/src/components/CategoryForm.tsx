@@ -13,7 +13,7 @@ import {
 import { Input } from '@renderer/components/ui/input'
 import { useNavigate } from 'react-router-dom'
 import { Category } from '@main/db/entites/category'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { cn } from '@renderer/utils/utils'
 
 export interface CategoryFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,7 +28,6 @@ export default function CategoryForm({
   category,
   ...props
 }: CategoryFormProps) {
-  const naviagte = useNavigate()
   const formSchema = z.object({
     name: z
       .string()
@@ -43,6 +42,14 @@ export default function CategoryForm({
     }
   })
 
+  useEffect(() => {
+    if (category) {
+      form.reset({
+        ...(category || { name: '' })
+      })
+    }
+  }, [category])
+
   function handleFormSubmit(values: z.infer<typeof formSchema>) {
     const data: any = {
       ...values,
@@ -56,11 +63,8 @@ export default function CategoryForm({
     onSubmit?.(data)
   }
 
-  const goBack = () => {
-    naviagte(-1)
-  }
   return (
-    <div className={cn(className)} {...props}>
+    <div className={cn('p-4 border rounded-md', className)} {...props}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
           <FormField
@@ -77,9 +81,6 @@ export default function CategoryForm({
             )}
           />
           <div className="flex flex-row items-center justify-start gap-x-2">
-            <Button type="button" variant={'outline'} onClick={goBack}>
-              返回
-            </Button>
             <Button type="submit">提交</Button>
           </div>
         </form>

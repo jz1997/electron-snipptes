@@ -3,9 +3,27 @@ import { Toaster } from '@renderer/components/ui/toaster'
 import { Result } from '@main/db/entites/common'
 import CategoryForm from '@renderer/components/CategoryForm'
 import useMessage from '@renderer/hooks/useMessage'
+import HeaderBar from '@renderer/components/HeaderBar'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 export default function EditCategory() {
   const { successMsg, errorMsg } = useMessage()
+  const [category, setCategory] = useState<Category>()
+
+  const { id } = useParams()
+  useEffect(() => {
+    if (id) {
+      window.api.findCategoryById(parseInt(id)).then((result: Result<Category>) => {
+        if (result.success) {
+          setCategory(result.data)
+          console.log(result)
+        } else {
+          errorMsg({ description: result.message || '获取分类失败' })
+        }
+      })
+    }
+  }, [])
 
   function onSubmit(values: any) {
     const category: Category = {
@@ -21,11 +39,14 @@ export default function EditCategory() {
   }
 
   return (
-    <div className="p-4">
-      <CategoryForm onSubmit={onSubmit} />
+    <>
+      <HeaderBar title="编辑分类" />
+      <div className="p-4">
+        <CategoryForm onSubmit={onSubmit} category={category} />
 
-      {/* Toast */}
-      <Toaster />
-    </div>
+        {/* Toast */}
+        <Toaster />
+      </div>
+    </>
   )
 }

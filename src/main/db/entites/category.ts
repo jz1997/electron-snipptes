@@ -8,7 +8,7 @@ export const mapCategory = (row: any): Category => {
   return {
     id: row.id,
     name: row.name,
-    createAt: row.create_at
+    createAt: row.created_at
   }
 }
 

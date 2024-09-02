@@ -23,7 +23,7 @@ export default function OperationDropMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild={true}>
         <div className="cursor-pointer p-2 hover:bg-slate-200 rounded-md">
-          <More className="" theme="outline" size="24" fill="#333" />
+          <More className="" theme="outline" size="20" fill="#333" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -44,3 +44,4 @@ export default function OperationDropMenu({
     </DropdownMenu>
   )
 }
+                            

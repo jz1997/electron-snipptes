@@ -12,6 +12,16 @@ ipcMain.handle('find-all-category', (_event: IpcMainInvokeEvent, params: Map<str
   }
 })
 
+ipcMain.handle('find-category-by-id', (_event: IpcMainInvokeEvent, id: number | bigint) => {
+  try {
+    const category = categoryRepository.findById(id)
+    return category ? Result.success(category) : Result.fail('未找到类型')
+  } catch (error) {
+    console.log(error)
+    return Result.fail("操作失败")
+  }
+})
+
 ipcMain.handle('insert-category', (_event: IpcMainInvokeEvent, category: Category) => {
   try {
     const result = categoryRepository.insert(category)

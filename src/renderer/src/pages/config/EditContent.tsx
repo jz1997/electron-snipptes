@@ -1,6 +1,7 @@
 import { Result } from '@main/db/entites/common'
 import { Content } from '@main/db/entites/content'
 import ContentForm from '@renderer/components/ContentForm'
+import HeaderBar from '@renderer/components/HeaderBar'
 import useMessage from '@renderer/hooks/useMessage'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -30,5 +31,10 @@ export default function EditContent() {
       }
     })
   }
-  return <ContentForm onSubmit={onSubmit} content={content} />
+  return (
+    <>
+      <HeaderBar title="编辑内容" />
+      <ContentForm onSubmit={onSubmit} content={content} />
+    </>
+  )
 }

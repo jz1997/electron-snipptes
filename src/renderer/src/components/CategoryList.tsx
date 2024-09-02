@@ -20,11 +20,10 @@ const CategoryList: React.FC<ContentProps> = ({
   categories = [],
   showAll = false,
   activeId = -1,
-  onSearchChange = (_e) => {},
+  onSearchChange = () => {},
   onAddClick = () => {},
-  onCategoryClick = (c: Category) => {},
-  onEditClick = (c: Category) => {},
-  onDeleteClick = (c: Category) => {},
+  onCategoryClick = () => {},
+  onEditClick = () => {},  onDeleteClick = () => {},
   className,
   ...props
 }) => {

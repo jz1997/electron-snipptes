@@ -4,6 +4,8 @@ import { cn } from '@renderer/utils/utils'
 import InputButtonGroup from './InputButtonGroup'
 import OperationDropMenu from './OperationDropMenu'
 import { Content } from '@main/db/entites/content'
+import moment from 'moment'
+import { formatDate } from '@renderer/utils/datetime'
 
 export interface SnippetListProps extends React.HTMLAttributes<HTMLDivElement> {
   contents: Content[]
@@ -33,8 +35,11 @@ export default function SnippetList({
               className="w-full flex flex-row justify-between items-center gap-x-2"
               key={'category_' + snippet.id}
             >
-              <div className="text-base cursor-pointer h-9 flex items-center hover:bg-slate-200 px-3 rounded-md flex-1 w-0">
+              <div className="text-base cursor-pointer h-9 flex justify-between items-center gap-x-2 hover:bg-slate-200 px-3 rounded-md flex-1 w-0">
                 <span className="truncate">{snippet.title}</span>
+                <span className="text-xs text-gray-700">
+                  {formatDate(snippet.createAt, 'YYYY/MM/DD')}
+                </span>
               </div>
               <div className="flex flex-row justify-between items-center shrink-0">
                 <OperationDropMenu

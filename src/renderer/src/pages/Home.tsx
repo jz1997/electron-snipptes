@@ -14,13 +14,11 @@ function Home(): JSX.Element {
   }, [])
 
   const rootMouseEnter = (e: MouseEvent) => {
-    e.stopPropagation()
     // 取消鼠标穿透
     window.electron.ipcRenderer.send('set-ignore-mouse-events', false)
   }
 
   const rootMouseLeave = (e: MouseEvent) => {
-    e.stopPropagation()
     // 设置鼠标穿透
     window.electron.ipcRenderer.send('set-ignore-mouse-events', true, { forward: true })
   }

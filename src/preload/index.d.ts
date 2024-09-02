@@ -12,6 +12,7 @@ declare global {
       registerKeymap: (keymapType: KeymapType, keymap: string) => Promise<boolean>
       openConfigWindow: () => void
       findAllCategory: (params?: Map<string, any>) => Promise<Category[]>
+      findCategoryById: (id: number | bigint) => Promise<Result<Category>>
       insertCategory: (category: Category) => Promise<Result<boolean>>
       updateCategory: (category: Category) => Promise<Result<boolean>>
       removeCategory: (id: number | bigint) => Promise<Result<boolean>>

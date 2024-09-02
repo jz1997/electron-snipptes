@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom'
 import { Content } from '@main/db/entites/content'
 import { useToast } from '@renderer/components/ui/use-toast'
 import { Toaster } from '@renderer/components/ui/toaster'
-import { Result } from '@main/db/entites/common'
 import {
   Select,
   SelectContent,
@@ -26,6 +25,7 @@ import {
 import { Textarea } from '@renderer/components/ui/textarea'
 import { Category } from '@main/db/entites/category'
 import { useEffect, useState } from 'react'
+import { SelectViewport } from '@radix-ui/react-select'
 
 export interface ContentFormProps {
   content?: Content
@@ -39,6 +39,8 @@ export default function ContentForm({
   onCancel = () => {}
 }: ContentFormProps) {
   const [categories, setCategories] = useState<Category[]>([])
+  const [filterCategoryName, setFilterCategoryName] = useState('')
+
   const naviagte = useNavigate()
   const { toast } = useToast()
   const formSchema = z.object({
@@ -136,13 +138,15 @@ export default function ContentForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {categories.map((category) => {
-                        return (
-                          <SelectItem key={category.id} value={category.id + ''}>
-                            {category.name}
-                          </SelectItem>
-                        )
-                      })}
+                      <SelectViewport>
+                        {categories.map((category) => {
+                          return (
+                            <SelectItem key={'category_' + category.id} value={category.id + ''}>
+                              {category.name}
+                            </SelectItem>
+                          )
+                        })}
+                      </SelectViewport>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -168,9 +172,6 @@ export default function ContentForm({
               )}
             />
             <div className="flex flex-row items-center justify-start gap-x-2">
-              <Button type="button" variant={'outline'} onClick={goBack}>
-                返回
-              </Button>
               <Button type="submit">提交</Button>
             </div>
           </form>

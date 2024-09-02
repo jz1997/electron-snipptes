@@ -1,6 +1,7 @@
-import { Category, mapCategories } from '../entites/category'
+import { Category, mapCategories, mapCategory } from '../entites/category'
 import { db } from '../../db/connect'
 import { Statement } from 'better-sqlite3'
+import { Result } from 'electron'
 
 // 查询全部
 const findAll = (params: Map<string, any>): Category[] => {
@@ -26,6 +27,12 @@ const findAll = (params: Map<string, any>): Category[] => {
   return mapCategories(rows)
 }
 
+const findById = (id: number | bigint): Category | undefined => {
+  const statement: Statement = db.prepare(`select * from categories where id = ?`)
+  const row = statement.get(id)
+  return row ? mapCategory(row) : undefined
+}
+
 // 添加分类
 const insert = (category: Category): boolean => {
   const statement: Statement = db.prepare(`insert into categories (name) values (?)`)
@@ -46,4 +53,4 @@ const remove = (id: number | bigint): boolean => {
   return info.changes > 0
 }
 
-export default { findAll, insert, update, remove }
+export default { findAll, findById, insert, update, remove }
