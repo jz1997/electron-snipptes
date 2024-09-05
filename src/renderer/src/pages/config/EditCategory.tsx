@@ -17,7 +17,6 @@ export default function EditCategory() {
       window.api.findCategoryById(parseInt(id)).then((result: Result<Category>) => {
         if (result.success) {
           setCategory(result.data)
-          console.log(result)
         } else {
           errorMsg({ description: result.message || '获取分类失败' })
         }

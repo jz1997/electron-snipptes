@@ -76,9 +76,10 @@
 //     }
 // }
 
-* { 
+* {
   // opacity: 0.98;
   box-sizing: border-box;
+  font-family: 'SourceHanSans'
 }
 
 body {
@@ -107,3 +108,5 @@ option {
   -o-user-select: none;
   -ms-user-select: none;
 }
+
+@import './font.scss';

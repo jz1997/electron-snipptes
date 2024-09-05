@@ -9,8 +9,8 @@ import url from 'node:url'
 export function createWindow(): BrowserWindow {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 600,
+    width: 1400,
+    height: 800,
     // x: width - 600,
     // y: 50,
     center: true,

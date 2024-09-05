@@ -1,13 +1,17 @@
 import { ChangeEvent, KeyboardEvent } from 'react'
-import { snippets as mockSnippets } from '@renderer/data/snippets'
+import { snippets as mockSnippets, snippets } from '@renderer/data/snippets'
 import { useStore } from '@renderer/store'
+import { Result } from '@main/db/entites/common'
+import { Content } from '@main/db/entites/content'
 
 export default () => {
   const setResult = useStore((state) => state.setResult)
   const { searchValue, setSearchValue } = useStore((state) => {
     return {
       searchValue: state.searchValue,
-      setSearchValue: state.setSearchValue
+      setSearchValue: state.setSearchValue,
+      result: (state) => state.result,
+      setResult: (state) => state.setResult
     }
   })
 
@@ -19,10 +23,15 @@ export default () => {
       setResult([])
       return
     }
-    const filteredSnippets = mockSnippets.filter(
-      (snippet) => snippet.content && snippet.content.toLowerCase().includes(value.toLowerCase())
-    )
-    setResult(filteredSnippets)
+
+    const params = new Map<string, any>([['title', value]])
+    window.api.findAllContent(params).then((r: Result<Content[]>) => {
+      if (r.success && r.data) {
+        setResult(r.data)
+      } else {
+        setResult([])
+      }
+    })
   }
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

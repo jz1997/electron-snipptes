@@ -1,0 +1,8 @@
+.toolbar-icon,
+.toolbar-icon-danger {
+  @apply cursor-pointer p-1 text-gray-800 hover:bg-slate-200 rounded-md;
+}
+
+.toolbar-icon-danger {
+  @apply text-red-500;
+}

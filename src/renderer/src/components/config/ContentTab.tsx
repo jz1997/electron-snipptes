@@ -1,63 +1,17 @@
-import React, { useEffect } from 'react'
-import CategoryList from '../CategoryList'
-import SnippetList from '../SnippetList'
-import useContent from '@renderer/hooks/useContent'
-import useCategory from '@renderer/hooks/useCategory'
-import { Category } from '@main/db/entites/category'
+import CategoryList from '../../pages/config/content/CategoryList/Index'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable'
+import { Outlet } from 'react-router-dom'
 
 export default function ContentTab() {
-  const {
-    categories,
-    getCategories,
-    activeId,
-    setActiveId,
-    onSearchChange,
-    addCategory,
-    editCategory,
-    deleteCategory
-  } = useCategory()
-
-  const {
-    contents,
-    updateCateoryParamsAndFetch,
-    getContents,
-    onSearch: onSearchContent,
-    onAddContent,
-    onEditContent,
-    onRemoveContent
-  } = useContent()
-
-  useEffect(() => {
-    getCategories()
-    getContents()
-  }, [])
-
-  const onCategoryClick = (c: Category) => {
-    setActiveId(c.id)
-    updateCateoryParamsAndFetch(c.id)
-  }
-
   return (
-    <div className="flex flex-row w-full h-full  justify-between gap-x-2">
-      <CategoryList
-        showAll={true}
-        className="w-64 flex shrink-0"
-        activeId={activeId}
-        categories={categories}
-        onCategoryClick={onCategoryClick}
-        onSearchChange={onSearchChange}
-        onAddClick={addCategory}
-        onEditClick={editCategory}
-        onDeleteClick={deleteCategory}
-      />
-      <SnippetList
-        className="flex-1 h-full w-full"
-        contents={contents}
-        onSearch={onSearchContent}
-        onDeleteClick={onRemoveContent}
-        onAddClick={onAddContent}
-        onEditClick={onEditContent}
-      />
-    </div>
+    <ResizablePanelGroup direction="horizontal">
+      <ResizablePanel defaultSize={20}>
+        <CategoryList />
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={80}>
+        <Outlet />
+      </ResizablePanel>
+    </ResizablePanelGroup>
   )
 }

@@ -21,6 +21,9 @@ const api = {
   findCategoryById: (id: number | bigint) => {
     return ipcRenderer.invoke('find-category-by-id', id)
   },
+  findCategoryByName: (name: string) => {
+    return ipcRenderer.invoke('find-category-by-name', name)
+  },
   insertCategory: (category: Category) => {
     return ipcRenderer.invoke('insert-category', category)
   },

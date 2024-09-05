@@ -1,21 +1,18 @@
+import { Content } from '@main/db/entites/content'
 import { cn } from '@renderer/utils/utils'
-import React from 'react'
-
-export interface ResultItemType {
-  id: number
-  content: string
-}
+import React, { useEffect } from 'react'
 
 export interface ReusltItemProps {
   isActive?: boolean
-  item: ResultItemType
-  onClick?: (item: ResultItemType) => void
+  item: Content
+  onClick?: (item: Content) => void
 }
 
 const ResultItem: React.FC<ReusltItemProps> = ({ isActive, item, onClick, ...props }) => {
-  const handleMouseClick = (item: ResultItemType) => {
+  const handleMouseClick = (item: Content) => {
     onClick && onClick(item)
   }
+
 
   return (
     <>
@@ -27,7 +24,10 @@ const ResultItem: React.FC<ReusltItemProps> = ({ isActive, item, onClick, ...pro
         )}
         {...props}
       >
-        <div className={'truncate no-select'}>{item.content}</div>
+        <div className='w-full flex flex-col gap-y-1'>
+          <div className="truncate no-select font-bold text-base">{item.title}</div>
+          <div className={'truncate no-select text-sm'}>{item.content}</div>
+        </div>
       </div>
     </>
   )

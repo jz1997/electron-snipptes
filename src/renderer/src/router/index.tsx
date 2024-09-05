@@ -1,10 +1,10 @@
-import { createHashRouter } from 'react-router-dom'
+import { createHashRouter, Navigate } from 'react-router-dom'
 import Home from '@renderer/pages/Home'
 import Config from '@renderer/pages/Config'
-import AddCategory from '@renderer/pages/config/AddCategory'
-import AddContent from '@renderer/pages/config/AddContent'
-import EditContent from '@renderer/pages/config/EditContent'
-import EditCategory from '@renderer/pages/config/EditCategory'
+import SnippetList from '@renderer/components/SnippetList'
+import ContentDetail from '@renderer/pages/config/ContentDetail'
+import Shortcut from '@renderer/pages/Shortcut'
+import ContentTab from '@renderer/components/config/ContentTab'
 
 const router = createHashRouter([
   {
@@ -13,26 +13,32 @@ const router = createHashRouter([
   },
   {
     path: 'config',
+    element: <Config />,
     children: [
       {
         path: '',
-        element: <Config />
+        index: true,
+        element: <Navigate to="content" />
       },
       {
-        path: 'category/add',
-        element: <AddCategory />
+        path: 'content',
+        element: <ContentTab />,
+        children: [
+          {
+            path: 'categories/:cid/contents',
+            element: <SnippetList />,
+            children: [
+              {
+                path: ':id',
+                element: <ContentDetail />
+              }
+            ]
+          }
+        ]
       },
       {
-        path: 'category/edit/:id',
-        element: <EditCategory />
-      },
-      {
-        path: 'content/add',
-        element: <AddContent />
-      },
-      {
-        path: 'content/edit/:id',
-        element: <EditContent />
+        path: 'shortcut',
+        element: <Shortcut />
       }
     ]
   }

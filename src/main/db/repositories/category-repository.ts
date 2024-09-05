@@ -33,6 +33,13 @@ const findById = (id: number | bigint): Category | undefined => {
   return row ? mapCategory(row) : undefined
 }
 
+// 根据分类名查询
+const findByName = (name: string): Category | undefined => {
+  const statement: Statement = db.prepare(`select * from categories where name = ? limit 1`)
+  const row = statement.get(name);
+  return row ? mapCategory(row) : undefined
+}
+
 // 添加分类
 const insert = (category: Category): boolean => {
   const statement: Statement = db.prepare(`insert into categories (name) values (?)`)
@@ -53,4 +60,4 @@ const remove = (id: number | bigint): boolean => {
   return info.changes > 0
 }
 
-export default { findAll, findById, insert, update, remove }
+export default { findAll, findById, findByName, insert, update, remove }

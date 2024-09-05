@@ -1,5 +1,5 @@
 export interface Content {
-  id: number | bigint
+  id?: number | bigint
   categoryId: number | bigint
   title: string
   content: string

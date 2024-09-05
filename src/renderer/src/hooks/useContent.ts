@@ -1,11 +1,9 @@
 import { Result } from '@main/db/entites/common'
 import { Content } from '@main/db/entites/content'
-import { useToast } from '@renderer/components/ui/use-toast'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStateWithCallbackLazy } from 'use-state-with-callback'
 import useMessage from './useMessage'
-import ResultItem from '@renderer/components/ResultItem'
 
 export interface ContentParams {
   title?: string
@@ -27,7 +25,6 @@ export default () => {
 
   const getContentWithParams = (contentParams: ContentParams) => {
     window.api.findAllContent(paramsToMap(contentParams)).then((result: Result<Content[]>) => {
-      console.log(result)
       if (result.success) {
         setContents(result.data || [])
       }
