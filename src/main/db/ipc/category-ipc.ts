@@ -18,7 +18,7 @@ ipcMain.handle('find-category-by-id', (_event: IpcMainInvokeEvent, id: number | 
     return category ? Result.success(category) : Result.fail('未找到类型')
   } catch (error) {
     console.log(error)
-    return Result.fail("操作失败")
+    return Result.fail('操作失败')
   }
 })
 
@@ -28,7 +28,7 @@ ipcMain.handle('find-category-by-name', (_event: IpcMainInvokeEvent, name: strin
     return category ? Result.success(category) : Result.fail('未找到类型')
   } catch (error) {
     console.log(error)
-    return Result.fail("操作失败")
+    return Result.fail('操作失败')
   }
 })
 

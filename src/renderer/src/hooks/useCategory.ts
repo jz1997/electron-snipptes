@@ -22,26 +22,48 @@ export default () => {
     getCategories(params)
   }
 
-  const addCategory = () => {
-    navigate('/config/category/add')
+  const addCategory = (c: Category) => {
+    window.api.insertCategory(c).then((result: Result<boolean>) => {
+      if (!result.success) {
+        errorMsg({ description: result.message || '添加分类失败' })
+        return
+      }
+      successMsg({ description: '添加分类成功' })
+      getCategories()
+    })
   }
 
   const editCategory = (c: Category) => {
-    navigate('/config/category/edit/' + c.id)
+    window.api.updateCategory(c).then((result: Result<boolean>) => {
+      if (!result.success) {
+        errorMsg({ description: result.message || '更新分类失败' })
+        return
+      }
+      successMsg({ description: '更新分类成功' })
+      getCategories()
+    })
   }
 
-  const deleteCategory = async (c: Category) => {
-    const getResult: Result<Category> = await window.api.findCategoryByName(c.name)
-    if (!getResult.success) {
-      errorMsg({ description: getResult.message || '获取分类失败' })
-    }
-    if (!getResult.data) {
-      errorMsg({ description: '分类已删除' })
-      getCategories()
+  const deleteCategory = async (id: bigint | number) => {
+    const deletedCategories = categories.filter((item) => item.id === id)
+    if (deletedCategories.length === 0) {
+      errorMsg({ description: '分类不存在' })
       return
     }
 
-    const removeResult = await window.api.removeCategory(c.id)
+    const toDeleteCategory = deletedCategories[0]
+
+    if (toDeleteCategory.id === -1) {
+      errorMsg({ description: '默认分类不能删除' })
+      return
+    }
+
+    if (!toDeleteCategory.id) {
+      errorMsg({ description: '分类不存在' })
+      return
+    }
+
+    const removeResult = await window.api.removeCategory(toDeleteCategory.id)
     if (!removeResult.success) {
       errorMsg({ description: removeResult.message || '删除分类失败' })
       return

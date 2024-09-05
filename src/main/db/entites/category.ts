@@ -1,6 +1,6 @@
 export interface Category {
-  id: number | bigint
-  name: string
+  id?: number | bigint
+  name?: string
   createAt?: Date
 }
 

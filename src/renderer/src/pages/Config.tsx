@@ -1,4 +1,5 @@
 import ContentTab from '@renderer/components/config/ContentTab'
+import Confirm from '@renderer/components/Confirm'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/components/ui/tabs'
 import { Toaster } from '@renderer/components/ui/toaster'
 import { cn } from '@renderer/utils/utils'
@@ -26,9 +27,14 @@ export default function Config() {
           快捷键
         </NavLink>
       </div>
-    <div className="w-full mt-2 border flex-1 p-2 rounded-md h-0">
+      <div className="w-full mt-2 border flex-1 p-2 rounded-md h-0">
         <Outlet />
       </div>
+
+      {/* Toaster */}
+      <Toaster />
+      {/* Confirm */}
+      <Confirm />
     </div>
   )
 }

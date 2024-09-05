@@ -5,19 +5,12 @@ import { Category } from '@main/db/entites/category'
 import OperationDropMenu from '../../../../components/OperationDropMenu'
 import useCategory from '@renderer/hooks/useCategory'
 import { useNavigate } from 'react-router-dom'
-import { Delete, Editor, FolderPlus, Refresh } from '@icon-park/react'
 
-import CategoryForm, { CategoryFormHandle } from '@renderer/components/CategoryForm'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@renderer/components/ui/dialog'
-import { Button } from '@renderer/components/ui/button'
+import ContentToolbar from '@renderer/components/config/ContentToolbar'
+import ModifyCategoryDialog, {
+  ModifyCategoryDialogHandle
+} from '@renderer/components/config/ModifyCategoryDialog'
+import useConfirm from '@renderer/hooks/useConfirm'
 
 const CategoryList: React.FC = ({}) => {
   const navigate = useNavigate()
@@ -26,11 +19,13 @@ const CategoryList: React.FC = ({}) => {
     getCategories,
     activeId,
     setActiveId,
+    addCategory,
     editCategory,
     deleteCategory
   } = useCategory()
 
-  const categoryFormRef = useRef<CategoryFormHandle>(null)
+  const modifyCategoryDialogRef = useRef<ModifyCategoryDialogHandle>(null)
+  const { confirm } = useConfirm()
 
   useEffect(() => {
     getCategories()
@@ -40,8 +35,24 @@ const CategoryList: React.FC = ({}) => {
   }, [])
 
   const onCategoryClick = (c: Category) => {
-    setActiveId(c.id)
+    setActiveId(c.id || -1)
     navigate(`/config/content/categories/${c.id}/contents`)
+  }
+
+  const onAddClick = () => {
+    modifyCategoryDialogRef.current?.open()
+  }
+
+  const saveOrUpdateCategory = (c: Category) => {
+    if (!c.createAt) {
+      c.createAt = new Date()
+    }
+
+    if (c.id) {
+      editCategory(c)
+    } else {
+      addCategory(c)
+    }
   }
 
   return (
@@ -88,50 +99,21 @@ const CategoryList: React.FC = ({}) => {
           </div>
         </ScrollArea>
 
-        <div className="w-full flex justify-center items-center gap-x-1 border-t pt-2">
-          <Refresh
-            theme="outline"
-            size="20"
-            className="p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer"
-            onClick={() => getCategories()}
-          />
-          <Dialog>
-            <DialogTrigger asChild>
-              <FolderPlus
-                size={20}
-                className="p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer"
-              />
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>新增分类</DialogTitle>
-              </DialogHeader>
-              <CategoryForm ref={categoryFormRef} />
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">取消</Button>
-                </DialogClose>
-                <Button
-                  onClick={() => {
-                    categoryFormRef.current?.submit()
-                  }}
-                >
-                  提交
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          <Editor
-            theme="outline"
-            size={20}
-            className="p-1 text-gray-800 hover:bg-slate-200 rounded-md"
-          />
-          <Delete
-            theme="outline"
-            size={20}
-            className="p-1 text-red-500 hover:bg-slate-200 rounded-md"
-          />
-        </div>
+        {/* Toolbar */}
+        <ContentToolbar
+          onRefreshClick={() => getCategories()}
+          onAddClick={onAddClick}
+          editDisable={activeId === -1}
+          deleteDisable={activeId === -1}
+          onDeleteClick={() =>
+            confirm('系统提示', '是否删除选中的分类？', {
+              onConfirm: () => deleteCategory(activeId)
+            })
+          }
+        />
+
+        {/* Modify Category Dialog */}
+        <ModifyCategoryDialog ref={modifyCategoryDialogRef} onSubmit={saveOrUpdateCategory} />
       </div>
     </>
   )

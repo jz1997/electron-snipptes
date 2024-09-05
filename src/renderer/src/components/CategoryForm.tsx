@@ -11,17 +11,17 @@ import {
 } from '@renderer/components/ui/form'
 import { Input } from '@renderer/components/ui/input'
 import { Category } from '@main/db/entites/category'
-import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
+import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { cn } from '@renderer/utils/utils'
 
-export interface CategoryFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onSubmit?: (value: any) => void
-  onCancel?: () => void
+export interface CategoryFormProps {
+  className?: string
+  onSubmit?: (value: Category) => void
   category?: Category
 }
 
 export interface CategoryFormHandle {
-  submit: () => void
+  submit: () => Promise<Category>
 }
 
 const CategoryForm = forwardRef<CategoryFormHandle, CategoryFormProps>(
@@ -52,42 +52,31 @@ const CategoryForm = forwardRef<CategoryFormHandle, CategoryFormProps>(
       submit: submit
     }))
 
-    // 表单按钮触发表单提交
-    function handleFormSubmit(values: z.infer<typeof formSchema>) {
-      const data: any = {
-        ...values,
-        createAt: new Date()
-      }
-
-      if (category && category.id) {
-        data.id = category.id
-      }
-
-      onSubmit?.(data)
-    }
-
     // 手动触发表单提交
-    const submit = () => {
-      form.handleSubmit((values: z.infer<typeof formSchema>) => {
-        return new Promise((resolve, reject) => {
-          const data: any = {
-            ...values,
-            createAt: new Date()
+    const submit = (): Promise<Category> => {
+      return new Promise<Category>((resolve) => {
+        form.handleSubmit((values: z.infer<typeof formSchema>) => {
+          const data: Category = {
+            ...values
           }
 
           if (category && category.id) {
             data.id = category.id
           }
 
+          if (category && category.createAt) {
+            data.createAt = category.createAt
+          }
+
           resolve(data)
-        })
-      })()
+        })()
+      })
     }
 
     return (
       <div className={cn(className)} {...props}>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-8">
+          <form className="space-y-8">
             <FormField
               control={form.control}
               name="name"
