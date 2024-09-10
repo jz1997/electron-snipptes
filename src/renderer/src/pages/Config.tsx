@@ -1,6 +1,4 @@
-import ContentTab from '@renderer/components/config/ContentTab'
 import Confirm from '@renderer/components/Confirm'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/components/ui/tabs'
 import { Toaster } from '@renderer/components/ui/toaster'
 import { cn } from '@renderer/utils/utils'
 import { NavLink, Outlet } from 'react-router-dom'

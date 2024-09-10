@@ -23,7 +23,7 @@ export default function HeaderBar({ title, onBackClick, className, ...props }: H
       {...props}
     >
       <div className="cursor-pointer p-2 hover:bg-slate-200 rounded-md" onClick={handleBackClick}>
-        <ArrowLeft size={18} color='gray'></ArrowLeft>
+        <ArrowLeft size={18} color="gray"></ArrowLeft>
       </div>
       <span className="text-base font-bold ml-4">{title}</span>
     </div>

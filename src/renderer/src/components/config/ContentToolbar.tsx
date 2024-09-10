@@ -6,6 +6,10 @@ export interface ContentToolbarProps extends React.HTMLAttributes<HTMLDivElement
   addDisable?: boolean
   editDisable?: boolean
   deleteDisable?: boolean
+  showRefresh?: boolean
+  showAdd?: boolean
+  showEdit?: boolean
+  showDelete?: boolean
   onRefreshClick?: () => void
   onAddClick?: () => void
   onEditClick?: () => void
@@ -18,6 +22,10 @@ export default function ContentToolbar({
   onEditClick,
   onDeleteClick,
   className,
+  showRefresh = true,
+  showAdd = true,
+  showEdit = true,
+  showDelete = true,
   refreshDisable = false,
   addDisable = false,
   editDisable = false,
@@ -57,41 +65,52 @@ export default function ContentToolbar({
       className={cn('w-full flex justify-center items-center gap-x-1 border-t pt-2', className)}
       {...props}
     >
-      <Refresh
-        theme="outline"
-        size="20"
-        className={cn(
-          'p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer',
-          refreshDisable && 'cursor-not-allowed'
-        )}
-        onClick={handleRefreshClick}
-      />
-      <FolderPlus
-        size={20}
-        className={cn(
-          'p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer',
-          addDisable && 'cursor-not-allowed'
-        )}
-        onClick={handleAddClick}
-      />
-      <Editor
-        theme="outline"
-        size={20}
-        className={cn(
-          'p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer',
-          editDisable && 'cursor-not-allowed'
-        )}
-        onClick={handleEditClick}
-      />
-      <Delete
-        theme="outline"
-        size={20}
-        className={cn(
-          'p-1 text-red-500 hover:bg-slate-200 rounded-md cursor-pointer',
-          deleteDisable && 'cursor-not-allowed'
-        )}
-        onClick={handleDeleteClick}
-      />
+      {showRefresh && (
+        <Refresh
+          theme="outline"
+          size="20"
+          className={cn(
+            'p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer',
+            refreshDisable && 'cursor-not-allowed text-gray-400'
+          )}
+          onClick={handleRefreshClick}
+        />
+      )}
+
+      {showAdd && (
+        <FolderPlus
+          size={20}
+          className={cn(
+            'p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer',
+            addDisable && 'cursor-not-allowed text-gray-400'
+          )}
+          onClick={handleAddClick}
+        />
+      )}
+
+      {showEdit && (
+        <Editor
+          theme="outline"
+          size={20}
+          className={cn(
+            'p-1 text-gray-800 hover:bg-slate-200 rounded-md cursor-pointer',
+            editDisable && 'cursor-not-allowed text-gray-400'
+          )}
+          onClick={handleEditClick}
+        />
+      )}
+
+      {showDelete && (
+        <Delete
+          theme="outline"
+          size={20}
+          className={cn(
+            'p-1 text-red-500 hover:bg-slate-200 rounded-md cursor-pointer',
+            deleteDisable && 'cursor-not-allowed text-gray-400'
+          )}
+          onClick={handleDeleteClick}
+        />
+      )}
     </div>
   )
 }

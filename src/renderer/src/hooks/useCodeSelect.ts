@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { ResultItemType } from '@renderer/components/ResultItem'
 import { useStore } from '@renderer/store'
+import { Content } from '@main/db/entites/content'
 
 export default () => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -13,7 +13,7 @@ export default () => {
     }
   })
 
-  const copyToClipboard = (result: ResultItemType) => {
+  const copyToClipboard = (result: Content) => {
     navigator.clipboard.writeText(result.content).then(() => {
       // close window
       window.api.hideWindow()
@@ -45,7 +45,7 @@ export default () => {
   }
 
   // 鼠标选中
-  const handleMouseSelect = (result: ResultItemType, index: number) => {
+  const handleMouseSelect = (result: Content, index: number) => {
     setCurrentIndex(index)
     copyToClipboard(result)
   }

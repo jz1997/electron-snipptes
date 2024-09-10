@@ -1,15 +1,14 @@
 import { Category, mapCategories, mapCategory } from '../entites/category'
 import { db } from '../../db/connect'
 import { Statement } from 'better-sqlite3'
-import { Result } from 'electron'
 
 // 查询全部
 const findAll = (params: Map<string, any>): Category[] => {
   let sql = `select * from categories`
-  let keys: string[] = Array.from(params.keys())
-  let values: any[] = []
+  const keys: string[] = Array.from(params.keys())
+  const values: any[] = []
   if (keys.length > 0) {
-    let condition: string[] = []
+    const condition: string[] = []
     for (let i = 0; i < keys.length; i++) {
       if (keys[i] === 'name') {
         condition.push(`name like ('%' || ? || '%')`)
@@ -36,21 +35,21 @@ const findById = (id: number | bigint): Category | undefined => {
 // 根据分类名查询
 const findByName = (name: string): Category | undefined => {
   const statement: Statement = db.prepare(`select * from categories where name = ? limit 1`)
-  const row = statement.get(name);
+  const row = statement.get(name)
   return row ? mapCategory(row) : undefined
 }
 
 // 添加分类
-const insert = (category: Category): boolean => {
+const insert = (category: Category): number | bigint => {
   const statement: Statement = db.prepare(`insert into categories (name) values (?)`)
   const info = statement.run(category.name)
-  return info.changes > 0
+  return info.lastInsertRowid
 }
 
-const update = (category: Category): boolean => {
+const update = (category: Category): number | bigint => {
   const statement: Statement = db.prepare(`update categories set name = ? where id = ?`)
   const info = statement.run(category.name, category.id)
-  return info.changes > 0
+  return info.lastInsertRowid
 }
 
 // 删除分类

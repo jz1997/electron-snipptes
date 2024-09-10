@@ -34,8 +34,8 @@ ipcMain.handle('find-category-by-name', (_event: IpcMainInvokeEvent, name: strin
 
 ipcMain.handle('insert-category', (_event: IpcMainInvokeEvent, category: Category) => {
   try {
-    const result = categoryRepository.insert(category)
-    return result ? Result.success(category) : Result.fail('添加类型失败')
+    const id = categoryRepository.insert(category)
+    return Result.success(id)
   } catch (error) {
     return Result.fail('操作失败')
   }
@@ -43,8 +43,8 @@ ipcMain.handle('insert-category', (_event: IpcMainInvokeEvent, category: Categor
 
 ipcMain.handle('update-category', (_event: IpcMainInvokeEvent, category: Category) => {
   try {
-    const result = categoryRepository.update(category)
-    return result ? Result.success(category) : Result.fail('更新类型失败')
+    const id = categoryRepository.update(category)
+    return Result.success(id)
   } catch (error) {
     console.log(error)
     return Result.fail('操作失败')

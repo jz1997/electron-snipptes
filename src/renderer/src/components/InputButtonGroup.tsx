@@ -9,7 +9,7 @@ export interface InputButtonGroupProps extends React.HTMLAttributes<HTMLDivEleme
 }
 
 export default function InputButtonGroup({
-  onInputChange = (e) => {},
+  onInputChange = () => {},
   onButtonClick = () => {}
 }: InputButtonGroupProps) {
   return (

@@ -1,18 +1,31 @@
 import { Category } from '@main/db/entites/category'
 import { Result } from '@main/db/entites/common'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { RefObject, useState } from 'react'
 import useMessage from './useMessage'
+import { useStateWithCallbackLazy } from 'use-state-with-callback'
+import React from 'react'
+
+export interface CategoryItem extends Category {
+  showEdit?: boolean
+  inputRef?: RefObject<HTMLInputElement>
+}
 
 export default () => {
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useStateWithCallbackLazy<CategoryItem[]>([])
   const [activeId, setActiveId] = useState<number | bigint>(-1)
-  const navigate = useNavigate()
   const { errorMsg, successMsg } = useMessage()
 
   const getCategories = (params?: Map<string, any>) => {
     window.api.findAllCategory(params).then((data) => {
-      setCategories(data || [])
+      setCategories(
+        (data || []).map((item) => {
+          return {
+            ...item,
+            inputRef: React.createRef<HTMLInputElement>()
+          }
+        }),
+        () => {}
+      )
     })
   }
 
@@ -76,6 +89,7 @@ export default () => {
     activeId,
     setActiveId,
     categories,
+    setCategories,
     getCategories,
     onSearchChange,
     addCategory,

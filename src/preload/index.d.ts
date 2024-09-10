@@ -14,14 +14,14 @@ declare global {
       findAllCategory: (params?: Map<string, any>) => Promise<Category[]>
       findCategoryById: (id: number | bigint) => Promise<Result<Category>>
       findCategoryByName: (name: string) => Promise<Result<Category>>
-      insertCategory: (category: Category) => Promise<Result<boolean>>
-      updateCategory: (category: Category) => Promise<Result<boolean>>
+      insertCategory: (category: Category) => Promise<Result<number | bigint>>
+      updateCategory: (category: Category) => Promise<Result<number | bigint>>
       removeCategory: (id: number | bigint) => Promise<Result<boolean>>
       findAllContent: (params?: Map<string, any>) => Promise<Result<Content[]>>
       findContentById: (id: number | bigint) => Promise<Result<Content>>
-      insertContent: (content: Content) => Promise<Result<boolean>>
+      insertContent: (content: Content) => Promise<Result<number | bigint>>
+      updateContent: (content: Content) => Promise<Result<number | bigint>>
       removeContent: (id: number | bigint) => Promise<Result<boolean>>
-      updateContent: (content: Content) => Promise<Result<boolean>>
     }
   }
 }

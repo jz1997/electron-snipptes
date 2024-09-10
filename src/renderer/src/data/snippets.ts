@@ -1,4 +1,4 @@
-import { Content } from "@main/db/entites/content";
+import { Content } from '@main/db/entites/content'
 
 export const snippets: Content[] = [
   {

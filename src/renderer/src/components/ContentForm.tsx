@@ -11,10 +11,7 @@ import {
   FormMessage
 } from '@renderer/components/ui/form'
 import { Input } from '@renderer/components/ui/input'
-import { useNavigate } from 'react-router-dom'
 import { Content } from '@main/db/entites/content'
-import { useToast } from '@renderer/components/ui/use-toast'
-import { Toaster } from '@renderer/components/ui/toaster'
 import {
   Select,
   SelectContent,
@@ -33,16 +30,9 @@ export interface ContentFormProps {
   onCancel?: () => void
 }
 
-export default function ContentForm({
-  content,
-  onSubmit = (v) => {},
-  onCancel = () => {}
-}: ContentFormProps) {
+export default function ContentForm({ content, onSubmit = () => {} }: ContentFormProps) {
   const [categories, setCategories] = useState<Category[]>([])
-  const [filterCategoryName, setFilterCategoryName] = useState('')
 
-  const naviagte = useNavigate()
-  const { toast } = useToast()
   const formSchema = z.object({
     title: z
       .string({
@@ -104,9 +94,6 @@ export default function ContentForm({
     onSubmit(data)
   }
 
-  const goBack = () => {
-    naviagte(-1)
-  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">

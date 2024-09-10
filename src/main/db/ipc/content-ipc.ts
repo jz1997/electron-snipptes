@@ -19,7 +19,7 @@ ipcMain.handle('find-content-by-id', (_event: IpcMainInvokeEvent, id: number | b
 ipcMain.handle('insert-content', (_event: IpcMainInvokeEvent, content: any) => {
   try {
     const result = contentRepository.insert(content)
-    return result ? Result.success(content) : Result.fail('添加内容失败')
+    return Result.success(result)
   } catch (error) {
     console.log(error)
     return Result.fail('操作失败')
@@ -29,7 +29,7 @@ ipcMain.handle('insert-content', (_event: IpcMainInvokeEvent, content: any) => {
 ipcMain.handle('update-content', (_event: IpcMainInvokeEvent, content: Content) => {
   try {
     const result = contentRepository.update(content)
-    return result ? Result.success(content) : Result.fail('更新内容失败')
+    return Result.success(result)
   } catch (error) {
     console.log(error)
     return Result.fail('操作失败')

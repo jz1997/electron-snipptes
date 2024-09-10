@@ -1,6 +1,6 @@
 import { Content } from '@main/db/entites/content'
 import { cn } from '@renderer/utils/utils'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 export interface ReusltItemProps {
   isActive?: boolean
@@ -13,7 +13,6 @@ const ResultItem: React.FC<ReusltItemProps> = ({ isActive, item, onClick, ...pro
     onClick && onClick(item)
   }
 
-
   return (
     <>
       <div
@@ -24,7 +23,7 @@ const ResultItem: React.FC<ReusltItemProps> = ({ isActive, item, onClick, ...pro
         )}
         {...props}
       >
-        <div className='w-full flex flex-col gap-y-1'>
+        <div className="w-full flex flex-col gap-y-1">
           <div className="truncate no-select font-bold text-base">{item.title}</div>
           <div className={'truncate no-select text-sm'}>{item.content}</div>
         </div>

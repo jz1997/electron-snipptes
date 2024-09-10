@@ -4,17 +4,25 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStateWithCallbackLazy } from 'use-state-with-callback'
 import useMessage from './useMessage'
+import useConfirm from './useConfirm'
 
 export interface ContentParams {
   title?: string
   categoryId?: number | bigint
 }
 
-export default () => {
+export interface UseContentParams {
+  cid: number | bigint
+}
+
+export default ({ cid }: UseContentParams) => {
+  const [loading, setLoading] = useState<boolean>(false)
   const [contents, setContents] = useState<Content[]>([])
   const [params, setParams] = useStateWithCallbackLazy<ContentParams>({})
   const navigate = useNavigate()
   const { successMsg, errorMsg } = useMessage()
+  const [activeId, setActiveId] = useState<number | bigint | undefined>(-1)
+  const { confirm } = useConfirm()
   const paramsToMap = (params: ContentParams = {}): Map<string, any> => {
     return new Map<string, any>(Object.entries(params))
   }
@@ -24,11 +32,23 @@ export default () => {
   }
 
   const getContentWithParams = (contentParams: ContentParams) => {
-    window.api.findAllContent(paramsToMap(contentParams)).then((result: Result<Content[]>) => {
-      if (result.success) {
-        setContents(result.data || [])
-      }
-    })
+    const paramsMap = paramsToMap(contentParams)
+    if (paramsMap.get('categoryId') == -1) {
+      paramsMap.set('categoryId', undefined)
+    }
+    setLoading(false)
+    window.api
+      .findAllContent(paramsMap)
+      .then((result: Result<Content[]>) => {
+        if (result.success) {
+          setContents(result.data || [])
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false)
+        }, 200)
+      })
   }
 
   const updateCateoryParamsAndFetch = (categoryId?: number | bigint) => {
@@ -52,26 +72,45 @@ export default () => {
   }
 
   const onAddContent = () => {
-    navigate('/config/content/add')
+    navigate(`/config/content/categories/${cid}/contents/-1`)
   }
 
   const onEditContent = (c: Content) => {
     navigate(`/config/content/edit/${c.id}`)
   }
 
-  const onRemoveContent = (c: Content) => {
-    window.api.removeContent(c.id).then((result: Result<boolean>) => {
-      if (result.success) {
-        successMsg({ description: '删除成功' })
-        getContents()
-      } else {
-        errorMsg({ description: result.message || '删除失败' })
+  const onContentClick = (c: Content) => {
+    setActiveId(c.id || -1)
+    navigate(`/config/content/categories/${cid}/contents/${c.id}`)
+  }
+
+  const onDeleteContent = (id: number | bigint) => {
+    if (id === -1) {
+      errorMsg({ description: '请选择要删除的内容' })
+      return
+    }
+
+    confirm('系统提示', '确定要删除该条内容吗？', {
+      onConfirm: () => {
+        window.api.removeContent(id).then((result: Result<boolean>) => {
+          if (result.success) {
+            successMsg({ description: '删除成功' })
+            getContents()
+            if (activeId === id) { 
+              navigate(`/config/content/categories/${cid}/contents/-1`)
+            }
+          } else {
+            errorMsg({ description: result.message || '删除失败' })
+          }
+        })
       }
     })
   }
 
   return {
     contents,
+    activeId,
+    setActiveId,
     setParams,
     updateCateoryParamsAndFetch,
     setContents,
@@ -79,6 +118,9 @@ export default () => {
     onSearch,
     onAddContent,
     onEditContent,
-    onRemoveContent
+    onDeleteContent,
+    onContentClick,
+    loading,
+    setLoading
   }
 }

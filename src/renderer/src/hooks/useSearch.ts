@@ -1,5 +1,4 @@
 import { ChangeEvent, KeyboardEvent } from 'react'
-import { snippets as mockSnippets, snippets } from '@renderer/data/snippets'
 import { useStore } from '@renderer/store'
 import { Result } from '@main/db/entites/common'
 import { Content } from '@main/db/entites/content'

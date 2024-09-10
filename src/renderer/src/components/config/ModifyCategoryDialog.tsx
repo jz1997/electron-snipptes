@@ -1,6 +1,5 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,7 +10,6 @@ import CategoryForm, { CategoryFormHandle } from '../CategoryForm'
 import { Button } from '../ui/button'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { Category } from '@main/db/entites/category'
-import { Domain } from 'domain'
 
 export interface ModifyCategoryDialogProps {
   onSubmit?: (value: Category) => void
@@ -67,5 +65,7 @@ const ModifyCategoryDialog = forwardRef<ModifyCategoryDialogHandle, ModifyCatego
     )
   }
 )
+
+ModifyCategoryDialog.displayName = 'ModifyCategoryDialog'
 
 export default ModifyCategoryDialog

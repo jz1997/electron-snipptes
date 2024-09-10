@@ -16,7 +16,6 @@ import { cn } from '@renderer/utils/utils'
 
 export interface CategoryFormProps {
   className?: string
-  onSubmit?: (value: Category) => void
   category?: Category
 }
 
@@ -25,7 +24,7 @@ export interface CategoryFormHandle {
 }
 
 const CategoryForm = forwardRef<CategoryFormHandle, CategoryFormProps>(
-  ({ category, onSubmit, className, ...props }: CategoryFormProps, ref) => {
+  ({ category, className, ...props }: CategoryFormProps, ref) => {
     const formSchema = z.object({
       name: z
         .string()
@@ -96,5 +95,7 @@ const CategoryForm = forwardRef<CategoryFormHandle, CategoryFormProps>(
     )
   }
 )
+
+CategoryForm.displayName = 'CategoryForm'
 
 export default CategoryForm
