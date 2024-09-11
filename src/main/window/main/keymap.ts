@@ -38,14 +38,19 @@ const registertGlobalKeymap = (
   // 设置新的快捷键
   KeymapManager.set(keymapType, keymap)
 
-  // 注册快捷键
-  return globalShortcut.register(keymap, () => {
-    if (win.isVisible()) {
-      win.hide()
-    } else {
-      win.show()
-    }
-  })
+  if (keymapType === KeymapType.SHOW_HIDE_WINDOW) {
+    // 注册快捷键
+    return globalShortcut.register(keymap, () => {
+      if (win.isVisible()) {
+        win.hide()
+      } else {
+        win.show()
+        win.webContents.send('search-input-focus')
+      }
+    })
+  } else {
+    return true
+  }
 }
 
 // 监听显示隐藏快捷键注册变更

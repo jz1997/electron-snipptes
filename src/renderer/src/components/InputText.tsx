@@ -2,7 +2,7 @@
 
 import { cn } from '@renderer/utils/utils'
 import { Input } from './ui/input'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 export interface InputTextProps extends React.HTMLAttributes<HTMLDivElement> {
   text: string
@@ -19,8 +19,15 @@ export default function InputText({
   onInputEnterKeyDown = () => {},
   onInputBlur = () => {}
 }: InputTextProps) {
-  const [showInput, setShowInput] = useState(false)
+  const [showInput, setShowInput] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [showInput])
+
   return (
     <div className="w-full">
       {showInput && (
@@ -54,7 +61,7 @@ export default function InputText({
           onClick={() => onTextClick(text)}
           onDoubleClick={() => {
             setShowInput(true)
-            inputRef?.current?.focus()
+            // inputRef.current?.focus()
           }}
         >
           <span className="w-full truncate">{text}</span>

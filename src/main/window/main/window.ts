@@ -16,7 +16,7 @@ export function createWindow(): BrowserWindow {
     show: false,
     frame: false,
     transparent: true,
-    alwaysOnTop: true,
+    // alwaysOnTop: true,
     autoHideMenuBar: true,
     resizable: false,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -36,6 +36,7 @@ export function createWindow(): BrowserWindow {
   if (is.dev) {
     mainWindow.webContents.openDevTools()
   }
+  
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }

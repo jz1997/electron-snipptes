@@ -17,7 +17,7 @@ export function createWindow(): BrowserWindow {
     show: false,
     // frame: false,
     // transparent: true,
-    alwaysOnTop: true,
+    // alwaysOnTop: true,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input } from './ui/input'
 import { cn } from '@renderer/utils/utils'
 import useSearch from '@renderer/hooks/useSearch'
@@ -10,6 +10,18 @@ interface SearchProps extends React.HTMLAttributes<HTMLDivElement> {}
 const Search: React.FC<SearchProps> = ({ className, ...props }) => {
   const { onKeyDown, onChange, searchValue } = useSearch()
   const { openSettingModal } = useSetting()
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  const focusInput = () => {
+    inputRef.current?.focus()
+  }
+
+  useEffect(() => {
+    window.electron.ipcRenderer.on('search-input-focus', focusInput)
+    return () => {
+      window.electron.ipcRenderer.removeAllListeners('search-input-focus')
+    }
+  }, [])
 
   return (
     <div
@@ -17,6 +29,7 @@ const Search: React.FC<SearchProps> = ({ className, ...props }) => {
       {...props}
     >
       <Input
+        ref={inputRef}
         value={searchValue}
         className="no-drag"
         onKeyDown={onKeyDown}

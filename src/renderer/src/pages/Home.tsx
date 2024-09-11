@@ -23,15 +23,15 @@ function Home(): JSX.Element {
     window.electron.ipcRenderer.send('set-ignore-mouse-events', true, { forward: true })
   }
 
-  useEffect(() => {
-    document.getElementById('root')?.addEventListener('mouseenter', rootMouseEnter)
-    document.getElementById('root')?.addEventListener('mouseleave', rootMouseLeave)
+  // useEffect(() => {
+  //   document.getElementById('root')?.addEventListener('mouseenter', rootMouseEnter)
+  //   document.getElementById('root')?.addEventListener('mouseleave', rootMouseLeave)
 
-    return () => {
-      document.getElementById('root')?.removeEventListener('mouseenter', rootMouseEnter)
-      document.getElementById('root')?.removeEventListener('mouseleave', rootMouseLeave)
-    }
-  }, [])
+  //   return () => {
+  //     document.getElementById('root')?.removeEventListener('mouseenter', rootMouseEnter)
+  //     document.getElementById('root')?.removeEventListener('mouseleave', rootMouseLeave)
+  //   }
+  // }, [])
 
   return (
     <>
