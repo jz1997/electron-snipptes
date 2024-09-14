@@ -65,7 +65,7 @@ function Home(): JSX.Element {
   return (
     <>
       <main ref={mainRef} className="w-screen h-screen p-4">
-        <div className="w-full h-full flex flex-col p-2 overflow-hidden rounded-lg shadow-[0_2px_10px] shadow-[rgba(0, 0, 0, 0.1)] bg-white">
+        <div className="w-full h-full flex flex-col p-2 overflow-hidden rounded-lg shadow-[0_2px_10px] shadow-gray-400 bg-white">
           <div className="drag w-full flex flex-row gap-x-2 items-start border-b h-6 shrink-0">
             <div
               className="nodrag rounded-full bg-red-500 flex justify-center items-center h-4 w-4 cursor-pointer shrink-0"
