@@ -79,7 +79,7 @@
 * {
   // opacity: 0.98;
   box-sizing: border-box;
-  font-family: 'SourceHanSans'
+  font-family: 'SourceHanSans';
 }
 
 body {
@@ -107,6 +107,17 @@ option {
   -moz-user-select: none;
   -o-user-select: none;
   -ms-user-select: none;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 @import './font.scss';

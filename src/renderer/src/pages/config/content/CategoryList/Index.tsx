@@ -12,6 +12,7 @@ import ModifyCategoryDialog, {
 import useConfirm from '@renderer/hooks/useConfirm'
 import { INVALID_ID } from '@renderer/utils/const'
 import InputText from '@renderer/components/InputText'
+import { Input } from '@renderer/components/ui/input'
 
 export default function CategoryList() {
   const navigate = useNavigate()
@@ -44,7 +45,7 @@ export default function CategoryList() {
     modifyCategoryDialogRef.current?.open()
   }
 
-  const onInputEnterKeyDown = (newText: string, c: Category) => { 
+  const onInputEnterKeyDown = (newText: string, c: Category) => {
     if (newText && c.id !== INVALID_ID) {
       c.name = newText
       editCategory(c)
@@ -66,6 +67,9 @@ export default function CategoryList() {
   return (
     <>
       <div className="flex flex-col justify-between items-center gap-y-2 w-full h-full">
+        <div className='w-full pr-2'>
+          <input className="w-full border outline-none focus:border-slate-200 rounded px-2 py-1 text-sm h-9" />
+        </div>
         <ScrollArea className="rounded-md w-full flex-1 h-0">
           <div className="w-full flex flex-col gap-y-1 pr-2">
             <div
@@ -92,7 +96,7 @@ export default function CategoryList() {
                   text={category.name || ''}
                   active={category.id === activeId}
                   onTextClick={() => onCategoryClick(category)}
-                  onInputEnterKeyDown={text => onInputEnterKeyDown(text, category)}
+                  onInputEnterKeyDown={(text) => onInputEnterKeyDown(text, category)}
                 />
               </div>
             ))}

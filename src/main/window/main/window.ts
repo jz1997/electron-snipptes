@@ -8,7 +8,7 @@ import { is } from '@electron-toolkit/utils'
 export function createWindow(): BrowserWindow {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 600,
+    width: 800,
     // height: 600,
     // x: width - 600,
     // y: 50,
@@ -16,7 +16,7 @@ export function createWindow(): BrowserWindow {
     show: false,
     frame: false,
     transparent: true,
-    // alwaysOnTop: true,
+    alwaysOnTop: true,
     autoHideMenuBar: true,
     resizable: false,
     ...(process.platform === 'linux' ? { icon } : {}),

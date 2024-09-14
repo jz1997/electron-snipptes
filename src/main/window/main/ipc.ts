@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, IpcMainEvent } from 'electron'
+import { BrowserWindow, ipcMain, IpcMainEvent, shell } from 'electron'
 import { createConfigWindow } from '../config/index'
 
 export const registerIpc = (win: BrowserWindow) => {
@@ -19,6 +19,11 @@ export const registerIpc = (win: BrowserWindow) => {
   // 创建配置文件窗口
   ipcMain.on('open-config-window', () => {
     createConfigWindow()
+  })
+
+  // 默认浏览器打开链接
+  ipcMain.on('open-link-in-browser', (event: IpcMainEvent, url: string) => {
+    shell.openExternal(url)
   })
 }
 

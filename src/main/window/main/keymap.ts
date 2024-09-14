@@ -46,6 +46,7 @@ const registertGlobalKeymap = (
       } else {
         win.show()
         win.webContents.send('search-input-focus')
+        win.webContents.send('reset')
       }
     })
   } else {

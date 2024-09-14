@@ -1,14 +1,32 @@
 import { Content } from '@main/db/entites/content'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@radix-ui/react-dropdown-menu'
 import { cn } from '@renderer/utils/utils'
-import React from 'react'
+import React, { useState } from 'react'
+import OperationDropMenu from './OperationDropMenu'
+import { More } from '@icon-park/react'
+import ResultItemContextMenu from './config/result-item-menu'
 
 export interface ReusltItemProps {
   isActive?: boolean
   item: Content
   onClick?: (item: Content) => void
+  className?: string
 }
 
-const ResultItem: React.FC<ReusltItemProps> = ({ isActive, item, onClick, ...props }) => {
+const ResultItem: React.FC<ReusltItemProps> = ({
+  isActive,
+  item,
+  onClick,
+  className,
+  ...props
+}) => {
   const handleMouseClick = (item: Content) => {
     onClick && onClick(item)
   }
@@ -16,14 +34,17 @@ const ResultItem: React.FC<ReusltItemProps> = ({ isActive, item, onClick, ...pro
   return (
     <>
       <div
-        onClick={() => handleMouseClick(item)}
         className={cn(
           'w-full leading-loose flex flex-row justify-start gap-x-1 cursor-pointer px-2 py-1 rounded-lg',
-          isActive ? 'bg-accent' : ''
+          isActive ? 'bg-slate-200' : '',
+          className
         )}
+        onKeyDown={(e) => {
+          console.log(e)
+        }}
         {...props}
       >
-        <div className="w-full flex flex-col gap-y-1">
+        <div className="w-full flex flex-col gap-y-1" onClick={() => handleMouseClick(item)}>
           <div className="truncate no-select font-bold text-base">{item.title}</div>
           <div className={'truncate no-select text-sm'}>{item.content}</div>
         </div>

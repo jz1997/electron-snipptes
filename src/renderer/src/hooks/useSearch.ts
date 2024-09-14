@@ -44,6 +44,7 @@ export default () => {
   return {
     onKeyDown,
     onChange,
-    searchValue
+    searchValue,
+    setSearchValue
   }
 }
