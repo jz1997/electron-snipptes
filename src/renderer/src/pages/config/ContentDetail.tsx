@@ -56,7 +56,6 @@ export default function ContentDetail() {
     if (content.id && content.id !== -1) {
       window.api.updateContent(content).then((result: Result<number | bigint>) => {
         if (result.success) {
-          // successMsg({ description: result.message || '更新内容成功' })
           setContentChangeState({ flag: true, id: content.id })
         } else {
           errorMsg({ description: result.message || '更新内容失败' })

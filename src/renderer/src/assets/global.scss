@@ -120,4 +120,8 @@ option {
   scrollbar-width: none; /* Firefox */
 }
 
+.page-container {
+  @apply w-full h-full p-4;
+}
+
 @import './font.scss';

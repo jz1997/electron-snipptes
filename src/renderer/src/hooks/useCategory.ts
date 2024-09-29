@@ -14,6 +14,7 @@ export default () => {
   const [categories, setCategories] = useStateWithCallbackLazy<CategoryItem[]>([])
   const [activeId, setActiveId] = useState<number | bigint>(-1)
   const { errorMsg, successMsg } = useMessage()
+  const [showAll, setShowAll] = useState<boolean>(false)
 
   const getCategories = (params?: Map<string, any>) => {
     window.api.findAllCategory(params).then((data) => {
@@ -24,7 +25,20 @@ export default () => {
             inputRef: React.createRef<HTMLInputElement>()
           }
         }),
-        () => {}
+        (currentCategories) => {
+          if (params?.get('name') && params?.get('name').length > 0) {
+            setShowAll(false)
+            const firstCategory = currentCategories?.[0]
+            if (firstCategory && firstCategory.id) {
+              setActiveId(firstCategory.id)
+            } else {
+              setActiveId(-1)
+            }
+          } else {
+            setShowAll(true)
+            setActiveId(-1)
+          }
+        }
       )
     })
   }
@@ -86,6 +100,7 @@ export default () => {
   }
 
   return {
+    showAll,
     activeId,
     setActiveId,
     categories,

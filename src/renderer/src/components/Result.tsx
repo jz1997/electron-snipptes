@@ -11,7 +11,7 @@ const Result: React.FC<ResultProps> = ({ className, ...props }) => {
 
   return (
     <>
-      <div className="bg-white w-full h-full flex flex-col justify-between relative">
+      <div className="bg-white w-full h-full flex flex-col justify-between relative" {...props}>
         {result && result.length > 0 && (
           <>
             <ScrollArea
@@ -24,7 +24,7 @@ const Result: React.FC<ResultProps> = ({ className, ...props }) => {
               {result.map((item, index) => {
                 return (
                   <ResultItem
-                    className='result-item'
+                    className="result-item"
                     onClick={(item) => handleMouseSelect(item, index)}
                     isActive={currentIndex === index}
                     key={index}

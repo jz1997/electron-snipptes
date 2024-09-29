@@ -1,7 +1,3 @@
-import { SearchHandle } from '@renderer/components/Search'
-import { useStore } from '@renderer/store'
-import { useRef } from 'react'
-
 export default () => {
   const handleKeyEvent = (e: KeyboardEvent) => {
     e.stopPropagation()

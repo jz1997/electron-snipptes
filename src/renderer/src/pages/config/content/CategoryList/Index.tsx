@@ -12,23 +12,25 @@ import ModifyCategoryDialog, {
 import useConfirm from '@renderer/hooks/useConfirm'
 import { INVALID_ID } from '@renderer/utils/const'
 import InputText from '@renderer/components/InputText'
-import { Input } from '@renderer/components/ui/input'
 
 export default function CategoryList() {
   const navigate = useNavigate()
   const {
+    showAll,
     categories = [],
     getCategories,
     activeId,
     setActiveId,
     addCategory,
     editCategory,
-    deleteCategory
+    deleteCategory,
+    onSearchChange
   } = useCategory()
 
   const modifyCategoryDialogRef = useRef<ModifyCategoryDialogHandle>(null)
   const { confirm } = useConfirm()
 
+  // 运行初始化默认加载全部内容
   useEffect(() => {
     getCategories()
     if (activeId === -1) {
@@ -36,9 +38,13 @@ export default function CategoryList() {
     }
   }, [])
 
+  // 监听 activeId 变化, 进行内容变更
+  useEffect(() => {
+    navigate(`/config/content/categories/${activeId}/contents`)
+  }, [activeId])
+
   const onCategoryClick = (c: Category) => {
     setActiveId(c.id || -1)
-    navigate(`/config/content/categories/${c.id}/contents`)
   }
 
   const onAddClick = () => {
@@ -67,25 +73,30 @@ export default function CategoryList() {
   return (
     <>
       <div className="flex flex-col justify-between items-center gap-y-2 w-full h-full">
-        <div className='w-full pr-2'>
-          <input className="w-full border outline-none focus:border-slate-200 rounded px-2 py-1 text-sm h-9" />
+        <div className="w-full pr-2">
+          <input
+            className="w-full border outline-none focus:border-slate-200 rounded px-2 py-1 text-sm h-9"
+            onInput={onSearchChange}
+          />
         </div>
         <ScrollArea className="rounded-md w-full flex-1 h-0">
           <div className="w-full flex flex-col gap-y-1 pr-2">
-            <div
-              className="flex flex-row justify-between items-center"
-              key={'category_all'}
-              onClick={() => onCategoryClick({ id: -1, name: 'ALL' })}
-            >
+            {showAll && (
               <div
-                className={cn(
-                  'text-sm cursor-pointer flex-1 w-0 flex justify-between items-center hover:bg-slate-200 px-2 py-2 rounded-md',
-                  activeId === -1 && 'bg-slate-200'
-                )}
+                className="flex flex-row justify-between items-center"
+                key={'category_all'}
+                onClick={() => onCategoryClick({ id: -1, name: 'ALL' })}
               >
-                <span className="w-full truncate">ALL</span>
+                <div
+                  className={cn(
+                    'text-sm cursor-pointer flex-1 w-0 flex justify-between items-center hover:bg-slate-200 px-2 py-2 rounded-md',
+                    activeId === -1 && 'bg-slate-200'
+                  )}
+                >
+                  <span className="w-full truncate">ALL</span>
+                </div>
               </div>
-            </div>
+            )}
 
             {categories.map((category) => (
               <div

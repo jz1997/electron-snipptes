@@ -1,9 +1,6 @@
 import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
-import { Input } from './ui/input'
 import { cn } from '@renderer/utils/utils'
 import useSearch from '@renderer/hooks/useSearch'
-import { SettingOne } from '@icon-park/react'
-import useSetting from '@renderer/hooks/useSetting'
 
 export interface SearchHandle {
   focus: () => void

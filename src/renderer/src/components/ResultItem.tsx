@@ -1,17 +1,6 @@
 import { Content } from '@main/db/entites/content'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@radix-ui/react-dropdown-menu'
 import { cn } from '@renderer/utils/utils'
-import React, { useState } from 'react'
-import OperationDropMenu from './OperationDropMenu'
-import { More } from '@icon-park/react'
-import ResultItemContextMenu from './config/result-item-menu'
+import React from 'react'
 
 export interface ReusltItemProps {
   isActive?: boolean

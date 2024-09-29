@@ -1,8 +1,8 @@
 export interface Content {
   id?: number | bigint
-  categoryId: number | bigint
-  title: string
-  content: string
+  categoryId?: number | bigint 
+  title?: string
+  content?: string
   createAt?: Date
 }
 

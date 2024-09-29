@@ -1,6 +1,7 @@
 import { BrowserWindow, ipcMain, IpcMainInvokeEvent } from 'electron'
 import { app, globalShortcut } from 'electron'
 import KeymapManager, { KeymapType } from '../../manager/keymap'
+import { createQuickSaveWindow } from '../quick-save'
 
 // ipc 消息
 const IPC_MSG_REGISTER_KEYMAP = 'register-keymap'
@@ -48,6 +49,10 @@ const registertGlobalKeymap = (
         win.webContents.send('search-input-focus')
         win.webContents.send('reset')
       }
+    })
+  } else if (keymapType === KeymapType.QUICK_SAVE) {
+    return globalShortcut.register(keymap, () => {
+      createQuickSaveWindow()
     })
   } else {
     return true

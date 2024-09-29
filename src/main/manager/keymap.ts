@@ -1,5 +1,6 @@
 export enum KeymapType {
-  SHOW_HIDE_WINDOW
+  SHOW_HIDE_WINDOW,
+  QUICK_SAVE
 }
 
 export default class KeymapManager {
@@ -8,11 +9,13 @@ export default class KeymapManager {
   }
 
   private static readonly KEYMAP: Map<KeymapType, string> = new Map<KeymapType, string>([
-    [KeymapType.SHOW_HIDE_WINDOW, '']
+    [KeymapType.SHOW_HIDE_WINDOW, ''],
+    [KeymapType.QUICK_SAVE, '']
   ])
 
   private static readonly DEFAULT_KEYMAP: Map<KeymapType, string> = new Map<KeymapType, string>([
-    [KeymapType.SHOW_HIDE_WINDOW, 'CommandOrControl+Shift+;']
+    [KeymapType.SHOW_HIDE_WINDOW, 'CommandOrControl+Shift+;'],
+    [KeymapType.QUICK_SAVE, 'CommandOrControl+Shift+i']
   ])
 
   public static get(key: KeymapType): string {

@@ -96,7 +96,7 @@ export default ({ cid }: UseContentParams) => {
           if (result.success) {
             successMsg({ description: '删除成功' })
             getContents()
-            if (activeId === id) { 
+            if (activeId === id) {
               navigate(`/config/content/categories/${cid}/contents/-1`)
             }
           } else {
@@ -105,6 +105,26 @@ export default ({ cid }: UseContentParams) => {
         })
       }
     })
+  }
+
+  const saveOrUpdateContent = (content: Content) => {
+    if (content.id) {
+      window.api.updateContent(content).then((result: Result<boolean>) => {
+        if (result.success) {
+          successMsg({ description: '更新内容成功' })
+        } else {
+          errorMsg({ description: result.message || '更新内容失败' })
+        }
+      })
+    } else {
+      window.api.insertContent(content).then((result: Result<boolean>) => {
+        if (result.success) {
+          successMsg({ description: '添加内容成功' })
+        } else {
+          errorMsg({ description: result.message || '添加内容失败' })
+        }
+      })
+    }
   }
 
   return {
@@ -121,6 +141,7 @@ export default ({ cid }: UseContentParams) => {
     onDeleteContent,
     onContentClick,
     loading,
-    setLoading
+    setLoading,
+    saveOrUpdateContent
   }
 }
