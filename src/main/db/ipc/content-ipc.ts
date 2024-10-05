@@ -2,10 +2,12 @@ import { ipcMain, IpcMainInvokeEvent } from 'electron'
 import { Result } from '../entites/common'
 import contentRepository from '../repositories/content-repository'
 import { Content } from '../entites/content'
+import categoryRepository from '../repositories/category-repository'
 
 ipcMain.handle('find-all-content', (_event: IpcMainInvokeEvent, params: Map<string, any>) => {
   try {
-    return Result.success(contentRepository.findAll(params))
+    const contents = contentRepository.findAll(params).map((c) => fillCategory(c))
+    return Result.success(contents)
   } catch (error) {
     console.log(error)
     return []
@@ -13,7 +15,8 @@ ipcMain.handle('find-all-content', (_event: IpcMainInvokeEvent, params: Map<stri
 })
 
 ipcMain.handle('find-content-by-id', (_event: IpcMainInvokeEvent, id: number | bigint) => {
-  return Result.success(contentRepository.findById(id))
+  const content = contentRepository.findById(id)
+  return Result.success(content)
 })
 
 ipcMain.handle('insert-content', (_event: IpcMainInvokeEvent, content: any) => {
@@ -44,3 +47,12 @@ ipcMain.handle('remove-content', (_event: IpcMainInvokeEvent, id: number | bigin
     return Result.fail('操作失败')
   }
 })
+
+const fillCategory = (content: Content): Content => {
+  if (content.categoryId) {
+    const category = categoryRepository.findById(content.categoryId)
+    content.category = category
+  }
+
+  return content
+}

@@ -40,7 +40,7 @@ const findById = (id: number | bigint): Content => {
 // 添加内容
 const insert = (content: Content): number | bigint => {
   const statement: Statement = db.prepare(
-    `insert into contents (category_id, title, content) values (@categoryId, @title, @content)`
+    `insert into contents (category_id, title, content, default_open_type) values (@categoryId, @title, @content, @defaultOpenType)`
   )
   const info = statement.run(content)
   return info.lastInsertRowid
@@ -49,7 +49,7 @@ const insert = (content: Content): number | bigint => {
 // 编辑内容
 const update = (content: Content): number | bigint => {
   const statement: Statement = db.prepare(
-    `update contents set category_id = @categoryId, title = @title, content = @content where id = @id`
+    `update contents set category_id = @categoryId, title = @title, content = @content, default_open_type = @defaultOpenType where id = @id`
   )
   const info = statement.run(content)
   return info.lastInsertRowid

@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useStore } from '@renderer/store'
-import { Content } from '@main/db/entites/content'
+import { Content, ContentOpenType } from '@main/db/entites/content'
+import useClipboard from './useClipboard'
 
 export default () => {
   const resultRef = useRef<HTMLDivElement>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const { writeText } = useClipboard()
   const { result, setResult, searchValue, setSearchValue } = useStore((state) => {
     return {
       result: state.result,
@@ -14,8 +16,13 @@ export default () => {
     }
   })
 
+  const openWithBrowser = (result: Content) => {
+    window.electron.ipcRenderer.send('open-link-in-browser', result.content)
+    window.electron.ipcRenderer.send('hide-window')
+  }
+
   const copyToClipboard = (result: Content) => {
-    navigator.clipboard.writeText(result.content).then(() => {
+    writeText(result.content || '').then(() => {
       // close window
       window.api.hideWindow()
     })
@@ -50,6 +57,10 @@ export default () => {
     }
 
     switch (e.code) {
+      case 'Enter':
+        const selectedResult = result[currentIndex]
+        openWithDefaultType(selectedResult)
+        break
       case 'ArrowDown':
         setCurrentIndex((pre) => {
           const nextIndex = pre + 1 > result.length - 1 ? 0 : pre + 1
@@ -68,8 +79,7 @@ export default () => {
         break
       case 'Digit1':
         if (e.altKey) {
-          window.electron.ipcRenderer.send('open-link-in-browser', result[currentIndex].content)
-          window.electron.ipcRenderer.send('hide-window')
+          openWithBrowser(result[currentIndex])
         }
         break
       case 'Digit2':
@@ -77,9 +87,20 @@ export default () => {
           copyToClipboard(result[currentIndex])
         }
         break
-      case 'Enter':
-        copyToClipboard(result[currentIndex])
+    }
+  }
+
+  // 根据打开方式打开
+  const openWithDefaultType = (result) => {
+    switch (result.defaultOpenType) {
+      case ContentOpenType.COPY_TO_CLIPBOARD:
+        copyToClipboard(result)
         break
+      case ContentOpenType.OPEN_WITH_BRAWSER:
+        openWithBrowser(result)
+        break
+      default:
+        copyToClipboard(result)
     }
   }
 

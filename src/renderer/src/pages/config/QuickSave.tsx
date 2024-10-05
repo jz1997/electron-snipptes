@@ -3,22 +3,24 @@ import ContentForm, { ContentFormHandle } from '@renderer/components/ContentForm
 import HeaderBar from '@renderer/components/HeaderBar'
 import { Button } from '@renderer/components/ui/button'
 import { Toaster } from '@renderer/components/ui/toaster'
+import useClipboard from '@renderer/hooks/useClipboard'
 import useContent from '@renderer/hooks/useContent'
 import { INVALID_ID } from '@renderer/utils/const'
-import { MouseEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function QuickSave() {
   const [content, setContent] = useState<string | undefined>()
   const { saveOrUpdateContent } = useContent({ cid: INVALID_ID })
+  const { readText } = useClipboard()
   const formRef = useRef<ContentFormHandle>(null)
 
   useEffect(() => {
-    navigator.clipboard.readText().then((data) => {
+    readText().then((data) => {
       setContent(data || '')
     })
   }, [])
 
-  const onSubmit = (e: MouseEvent<HTMLButtonElement>) => {
+  const onSubmit = () => {
     formRef.current?.submit().then((values: Content) => {
       saveOrUpdateContent(values)
     })

@@ -1,5 +1,7 @@
 import { Result } from '@main/db/entites/common'
-import { Content } from '@main/db/entites/content'
+import { Content, ContentOpenType } from '@main/db/entites/content'
+import { Label } from '@renderer/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@renderer/components/ui/radio-group'
 import useMessage from '@renderer/hooks/useMessage'
 import { useStore } from '@renderer/store'
 import { DEFAULT_CATEGORY_ID } from '@renderer/utils/const'
@@ -20,6 +22,7 @@ export default function ContentDetail() {
     title: '',
     content: '',
     categoryId: cid ? parseNumber(cid) : DEFAULT_CATEGORY_ID,
+    defaultOpenType: ContentOpenType.COPY_TO_CLIPBOARD,
     createAt: new Date()
   })
   const { errorMsg } = useMessage()
@@ -45,6 +48,7 @@ export default function ContentDetail() {
           title: '',
           content: '',
           categoryId: cid ? parseNumber(cid) : DEFAULT_CATEGORY_ID,
+          defaultOpenType: ContentOpenType.COPY_TO_CLIPBOARD,
           createAt: new Date()
         },
         () => {}
@@ -87,6 +91,30 @@ export default function ContentDetail() {
           })
         }}
       ></input>
+
+      <div className="flex items-center justify-start border-b py-4 text-sm text-gray-600">
+        <span className="">默认打开类型：</span>
+        <RadioGroup
+          value={content?.defaultOpenType || ContentOpenType.COPY_TO_CLIPBOARD}
+          className="flex flex-row"
+          onValueChange={(value) => {
+            setContent({ ...(content || {}), defaultOpenType: value }, (currentContent) => {
+              if (currentContent) {
+                updateContent(currentContent)
+              }
+            })
+          }}
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="COPY_TO_CLIPBOARD" id="COPY_TO_CLIPBOARD" />
+            <Label htmlFor="COPY_TO_CLIPBOARD">拷贝剪切板</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="OPEN_WITH_BRAWSER" id="OPEN_WITH_BRAWSER" />
+            <Label htmlFor="OPEN_WITH_BRAWSER">默认浏览器打开</Label>
+          </div>
+        </RadioGroup>
+      </div>
 
       <textarea
         value={content?.content}

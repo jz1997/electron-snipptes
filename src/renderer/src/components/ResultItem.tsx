@@ -1,6 +1,7 @@
 import { Content } from '@main/db/entites/content'
 import { cn } from '@renderer/utils/utils'
 import React from 'react'
+import { Badge } from './ui/badge'
 
 export interface ReusltItemProps {
   isActive?: boolean
@@ -24,7 +25,7 @@ const ResultItem: React.FC<ReusltItemProps> = ({
     <>
       <div
         className={cn(
-          'w-full leading-loose flex flex-row justify-start gap-x-1 cursor-pointer px-2 py-1 rounded-lg',
+          'w-full leading-loose flex flex-row justify-between cursor-pointer px-2 py-1 rounded-lg gap-x-2',
           isActive ? 'bg-slate-200' : '',
           className
         )}
@@ -33,10 +34,15 @@ const ResultItem: React.FC<ReusltItemProps> = ({
         }}
         {...props}
       >
-        <div className="w-full flex flex-col gap-y-1" onClick={() => handleMouseClick(item)}>
+        <div className="w-0 flex-1 flex flex-col gap-y-1" onClick={() => handleMouseClick(item)}>
           <div className="truncate no-select font-bold text-base">{item.title}</div>
           <div className={'truncate no-select text-sm'}>{item.content}</div>
         </div>
+        {item?.category?.name && (
+          <div className='flex justify-center items-center shrink-0'>
+            <Badge className='text-xs'>{item?.category?.name}</Badge>
+          </div>
+        )}
       </div>
     </>
   )

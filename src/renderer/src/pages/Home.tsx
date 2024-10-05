@@ -1,21 +1,16 @@
 import { useEffect, useRef } from 'react'
 import Result from '@renderer/components/Result'
 import Search from '@renderer/components/Search'
-import Error from '@renderer/components/Error'
 import { Toaster } from '@renderer/components/ui/toaster'
 import useKeymap from '@renderer/hooks/useKeymap'
 import { KeymapType } from '@main/manager/keymap'
 import useHomeKeydown from '@renderer/hooks/useHomeKeydown'
-import { Close, SettingConfig } from '@icon-park/react'
-import { cn } from '@renderer/utils/utils'
 import { useStore } from '@renderer/store'
-import useSetting from '@renderer/hooks/useSetting'
 import WindowTitle from '@renderer/components/WindowTitle'
 
 function Home(): JSX.Element {
   const mainRef = useRef<HTMLDivElement>(null)
   const { addKeydownEventHandler, removeKeydownEventHandler } = useHomeKeydown()
-  const { openSettingModal } = useSetting()
   const { register } = useKeymap()
   const { setResult, setSearchValue } = useStore((state) => {
     return {
