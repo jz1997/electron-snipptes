@@ -2,13 +2,13 @@ import { EverythingParams, EverythingResponse, findFile } from '../api/everythin
 import { Result } from '../db/entites/common'
 
 export enum CommandType {
-  FIND_FILE = 'findFile'
+  FIND_FILE = 'FIND_FILE'
 }
 
 export class CommandManager {
   private static readonly COMMANDS: Map<string, AbstractCommand<any, any>> = new Map<
     string,
-    AbstractCommand<string, any>
+    AbstractCommand<any, any>
   >()
   constructor() {
     this.init()
@@ -16,13 +16,17 @@ export class CommandManager {
 
   private init() {
     CommandManager.COMMANDS.set(
-      'findFile',
+      CommandType.FIND_FILE,
       new EveryThingFindFileCommand('查询文件', CommandType.FIND_FILE)
     )
   }
 
   public get(command: CommandType): AbstractCommand<any, any> {
     return CommandManager.COMMANDS.get(command.toString())!
+  }
+
+  public list(): Array<AbstractCommand<any, any>> {
+    return Array.from(CommandManager.COMMANDS.values())
   }
 }
 
@@ -31,25 +35,33 @@ export interface DoCommand<T, R> {
 }
 
 export abstract class AbstractCommand<T, R> implements DoCommand<T, R> {
-  private name: string
-  private command: string
-  private description?: string
+  private _name: string
+  private _command: string
+  private _description?: string
 
   constructor(name: string, command: string, description?: string) {
-    this.name = name
-    this.command = command
-    this.description = description
+    this._name = name
+    this._command = command
+    this._description = description
   }
   abstract execute(params: T): Promise<R>
 
-  get Name(): string {
-    return this.name
+  public get name(): string {
+    return this._name
   }
-  get Command(): string {
-    return this.command
+  public get command(): string {
+    return this._command
   }
-  get Description(): string | undefined {
-    return this.description
+  public get description(): string | undefined {
+    return this._description
+  }
+
+  public toJSON(): Record<string, any> {
+    return {
+      name: this._name,
+      command: this._command,
+      description: this._description
+    }
   }
 }
 

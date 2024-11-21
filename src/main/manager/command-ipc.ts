@@ -8,3 +8,9 @@ ipcMain.handle('do-command', (_event: IpcMainInvokeEvent, type: CommandType, par
   return command.execute(params)
 })
 
+ipcMain.handle('get-command-list', (_event: IpcMainInvokeEvent, name?: string) => {
+  return commandManager
+    .list()
+    .filter((command) => command.command.includes((name || '').toUpperCase()))
+    .map((command) => command.toJSON())
+})

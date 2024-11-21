@@ -1,7 +1,6 @@
 import { ipcMain, IpcMainInvokeEvent } from 'electron'
 import { EverythingParams, EverythingResponse, findFile } from './everything'
 import { Result } from '../db/entites/common'
-import { AxiosResponse } from 'axios'
 
 ipcMain.handle(
   'find-file',

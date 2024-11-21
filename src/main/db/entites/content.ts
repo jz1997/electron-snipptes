@@ -4,6 +4,7 @@ export enum ContentType {
   URL = 'url',
   FILE = 'file',
   FOLDER = 'folder',
+  COMMAND = 'command',
   UNKNOWN = 'unknown'
 }
 

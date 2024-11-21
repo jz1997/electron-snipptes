@@ -5,7 +5,7 @@ import { Category } from '@main/db/entites/category'
 import { Content } from '@main/db/entites/content'
 import { EverythingParams, EverythingResponse } from '@main/api/everything'
 import { Result } from '@main/db/entites/common'
-import { CommandType } from '@main/manager/Command'
+import { CommandType } from '@main/manager/command'
 
 // Custom APIs for renderer
 const api = {

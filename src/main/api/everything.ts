@@ -35,7 +35,7 @@ export interface EverythingParams {
 }
 
 const defaultParams: EverythingParams = {
-  s: '鄂尔多斯',
+  s: '',
   o: 0,
   c: 32,
   j: 1,

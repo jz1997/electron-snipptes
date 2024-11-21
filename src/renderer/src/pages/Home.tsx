@@ -7,9 +7,6 @@ import { KeymapType } from '@main/manager/keymap'
 import useHomeKeydown from '@renderer/hooks/useHomeKeydown'
 import { useStore } from '@renderer/store'
 import WindowTitle from '@renderer/components/WindowTitle'
-import { EverythingResponse } from '@main/api/everything'
-import { Result } from '@main/db/entites/common'
-import { CommandType } from '@main/manager/command'
 
 function Home(): JSX.Element {
   const mainRef = useRef<HTMLDivElement>(null)

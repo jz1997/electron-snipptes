@@ -1,10 +1,11 @@
-import { ChangeEvent, KeyboardEvent } from 'react'
+import { KeyboardEvent } from 'react'
 import { useStore } from '@renderer/store'
 import { Result } from '@main/db/entites/common'
-import { Content, parseContentType } from '@main/db/entites/content'
-import { CommandType } from '@main/manager/command'
+import { Content, ContentType, parseContentType } from '@main/db/entites/content'
+import { AbstractCommand, CommandType } from '@main/manager/command'
 import useMessage from './useMessage'
 import { EverythingFile, EverythingResponse } from '@main/api/everything'
+import { parseCommand } from '../../../common/utils/command-utils'
 
 export default () => {
   const { errorMsg } = useMessage()
@@ -18,9 +19,50 @@ export default () => {
     }
   })
 
-  const onChange = (value: string) => {
+  const onChange = async (value: string) => {
     setSearchValue(value)
-    setResult([])
+    const command: CommandType | undefined = parseCommand(value || '')
+    if (command) {
+      if (command === CommandType.FIND_FILE) {
+        const fileName = value.substring(CommandType.FIND_FILE.length + 1)
+        window.api
+          .doCommand(CommandType.FIND_FILE, {
+            s: fileName,
+            c: 100
+          })
+          .then((result: Result<EverythingResponse>) => {
+            if (result.success) {
+              const results = (result.data?.results || []).map((file: EverythingFile): Content => {
+                return {
+                  title: file.name,
+                  content: file.path,
+                  type: parseContentType(file.type)
+                }
+              })
+              setResult(results)
+            } else {
+              errorMsg({ description: result.message })
+            }
+          })
+      }
+    } else {
+      const commands = await window.electron.ipcRenderer.invoke('get-command-list', value)
+      let results: Array<Content> = commands.map((command) => {
+        return {
+          title: command.command,
+          content: command.name,
+          type: ContentType.COMMAND
+        } as Content
+      })
+
+      const params = new Map<string, any>([['title', value]])
+      const contentResult: Result<Content[]> = await window.api.findAllContent(params)
+      if (contentResult.success && contentResult.data && contentResult.data.length > 0) {
+        results = results.concat(contentResult.data)
+      }
+
+      setResult(results)
+    }
   }
 
   const doSearch = () => {
@@ -31,7 +73,7 @@ export default () => {
     }
 
     // 如果是命令
-    if (value.startsWith(CommandType.FIND_FILE)) {
+    if (value.toUpperCase().startsWith(CommandType.FIND_FILE)) {
       const fileName = value.substring(CommandType.FIND_FILE.length + 1)
       window.api
         .doCommand(CommandType.FIND_FILE, {
@@ -40,7 +82,6 @@ export default () => {
         })
         .then((result: Result<EverythingResponse>) => {
           if (result.success) {
-            console.log(result)
             const results = (result.data?.results || []).map((file: EverythingFile): Content => {
               return {
                 title: file.name,
@@ -49,7 +90,6 @@ export default () => {
               }
             })
             setResult(results)
-            console.log(results)
           } else {
             errorMsg({ description: result.message })
           }
@@ -71,7 +111,6 @@ export default () => {
       e.preventDefault()
       return false
     } else if (e.key === 'Enter') {
-      doSearch()
     }
     return true
   }

@@ -70,7 +70,11 @@ export default () => {
     switch (e.code) {
       case 'Enter':
         const selectedResult = result[currentIndex]
-        openWithDefaultType(selectedResult)
+        if (selectedResult.type === ContentType.COMMAND) {
+          setSearchValue(selectedResult.title || '')
+        } else {
+          openWithDefaultType(selectedResult)
+        }
         break
       case 'ArrowDown':
         setCurrentIndex((pre) => {
