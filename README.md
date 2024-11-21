@@ -1,4 +1,4 @@
-# electron-snippets
+# snippets
 
 An Electron application with React and TypeScript
 

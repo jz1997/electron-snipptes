@@ -38,11 +38,10 @@ const ResultItem: React.FC<ReusltItemProps> = ({
           <div className="truncate no-select font-bold text-base">{item.title}</div>
           <div className={'truncate no-select text-sm'}>{item.content}</div>
         </div>
-        {item?.category?.name && (
-          <div className='flex justify-center items-center shrink-0'>
-            <Badge className='text-xs'>{item?.category?.name}</Badge>
-          </div>
-        )}
+        <div className="flex justify-center items-center shrink-0 gap-x-1">
+          {item?.category?.name && <Badge className="text-xs">{item?.category?.name}</Badge>}
+          {item?.type && <Badge className="text-xs">{item?.type}</Badge>}
+        </div>
       </div>
     </>
   )

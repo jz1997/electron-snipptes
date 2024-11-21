@@ -1,7 +1,9 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
+import { EverythingParams, EverythingResponse } from '@main/api/everything'
 import { KeymapType } from '@main/config/keymap'
 import { Category } from '@main/db/entites/category'
 import { Content } from '@main/db/entites/content'
+import { CommandType } from '@main/manager/Command'
 import { Result } from 'electron'
 
 declare global {
@@ -22,6 +24,10 @@ declare global {
       insertContent: (content: Content) => Promise<Result<number | bigint>>
       updateContent: (content: Content) => Promise<Result<number | bigint>>
       removeContent: (id: number | bigint) => Promise<Result<boolean>>
+      findFile: (
+        params?: EverythingParams | Record<string, any>
+      ) => Promise<Result<EverythingResponse>>
+      doCommand: (type: CommandType, params?: any) => Promise<Result<any>>
     }
   }
 }

@@ -5,7 +5,8 @@ import { camelToSnakeCase } from '../../utils/utils'
 
 // 查询全部
 const findAll = (params: Map<string, any>): Content[] => {
-  let sql = `select * from contents`
+  let sql = `select *
+             from contents`
   const keys: string[] = Array.from(params.keys())
   const values: any[] = []
   if (keys.length > 0) {
@@ -32,15 +33,21 @@ const findAll = (params: Map<string, any>): Content[] => {
 }
 
 const findById = (id: number | bigint): Content => {
-  const statement: Statement = db.prepare(`select * from contents where id = ?`)
+  const statement: Statement = db.prepare(`select *
+                                           from contents
+                                           where id = ?`)
   const row = statement.get(id)
   return mapContent(row)
 }
 
 // 添加内容
 const insert = (content: Content): number | bigint => {
+  if (!content.defaultOpenType) {
+    content.defaultOpenType = ''
+  }
   const statement: Statement = db.prepare(
-    `insert into contents (category_id, title, content, default_open_type) values (@categoryId, @title, @content, @defaultOpenType)`
+    `insert into contents (category_id, title, content, default_open_type)
+     values (@categoryId, @title, @content, @defaultOpenType)`
   )
   const info = statement.run(content)
   return info.lastInsertRowid
@@ -49,7 +56,12 @@ const insert = (content: Content): number | bigint => {
 // 编辑内容
 const update = (content: Content): number | bigint => {
   const statement: Statement = db.prepare(
-    `update contents set category_id = @categoryId, title = @title, content = @content, default_open_type = @defaultOpenType where id = @id`
+    `update contents
+     set category_id = @categoryId,
+         title = @title,
+         content = @content,
+         default_open_type = @defaultOpenType
+     where id = @id`
   )
   const info = statement.run(content)
   return info.lastInsertRowid
@@ -57,7 +69,9 @@ const update = (content: Content): number | bigint => {
 
 // 删除内容
 const remove = (id: number | bigint): boolean => {
-  const statement: Statement = db.prepare(`delete from contents where id = ?`)
+  const statement: Statement = db.prepare(`delete
+                                           from contents
+                                           where id = ?`)
   const info = statement.run(id)
   return info.changes > 0
 }

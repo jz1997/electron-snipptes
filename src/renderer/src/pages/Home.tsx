@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import Result from '@renderer/components/Result'
+import SnippetResult from '@renderer/components/Result'
 import Search from '@renderer/components/Search'
 import { Toaster } from '@renderer/components/ui/toaster'
 import useKeymap from '@renderer/hooks/useKeymap'
@@ -7,6 +7,9 @@ import { KeymapType } from '@main/manager/keymap'
 import useHomeKeydown from '@renderer/hooks/useHomeKeydown'
 import { useStore } from '@renderer/store'
 import WindowTitle from '@renderer/components/WindowTitle'
+import { EverythingResponse } from '@main/api/everything'
+import { Result } from '@main/db/entites/common'
+import { CommandType } from '@main/manager/command'
 
 function Home(): JSX.Element {
   const mainRef = useRef<HTMLDivElement>(null)
@@ -46,7 +49,7 @@ function Home(): JSX.Element {
           <div className="w-full flex flex-1 flex-col h-0 mt-2 border-gray-300 overflow-hidden">
             <Search />
             <div className="flex-1 h-0 mt-2">
-              <Result />
+              <SnippetResult />
             </div>
           </div>
         </div>

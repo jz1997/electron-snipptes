@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useStore } from '@renderer/store'
-import { Content, ContentOpenType } from '@main/db/entites/content'
+import { Content, ContentOpenType, ContentType } from '@main/db/entites/content'
 import useClipboard from './useClipboard'
+import useMessage from './useMessage'
 
 export default () => {
   const resultRef = useRef<HTMLDivElement>(null)
@@ -15,9 +16,19 @@ export default () => {
       setSearchValue: state.setSearchValue
     }
   })
+  const { errorMsg } = useMessage()
 
   const openWithBrowser = (result: Content) => {
     window.electron.ipcRenderer.send('open-link-in-browser', result.content)
+    window.electron.ipcRenderer.send('hide-window')
+  }
+
+  const openPath = (result: Content) => {
+    if (!result.content) {
+      errorMsg({ description: '无内容' })
+      return
+    }
+    window.electron.ipcRenderer.send('open-path', result.content + '/' + result.title)
     window.electron.ipcRenderer.send('hide-window')
   }
 
@@ -91,16 +102,31 @@ export default () => {
   }
 
   // 根据打开方式打开
-  const openWithDefaultType = (result) => {
-    switch (result.defaultOpenType) {
-      case ContentOpenType.COPY_TO_CLIPBOARD:
-        copyToClipboard(result)
-        break
-      case ContentOpenType.OPEN_WITH_BRAWSER:
-        openWithBrowser(result)
-        break
-      default:
-        copyToClipboard(result)
+  const openWithDefaultType = (result: Content) => {
+    if (result.defaultOpenType) {
+      switch (result.defaultOpenType) {
+        case ContentOpenType.COPY_TO_CLIPBOARD:
+          copyToClipboard(result)
+          break
+        case ContentOpenType.OPEN_WITH_BRAWSER:
+          openWithBrowser(result)
+          break
+        default:
+          copyToClipboard(result)
+      }
+    } else {
+      switch (result.type) {
+        case ContentType.FILE:
+        case ContentType.FOLDER:
+          openPath(result)
+          break
+        case ContentType.URL:
+          openWithBrowser(result)
+          break
+        case ContentType.UNKNOWN:
+        default:
+          copyToClipboard(result)
+      }
     }
   }
 

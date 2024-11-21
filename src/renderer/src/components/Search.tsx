@@ -54,8 +54,8 @@ const Search = forwardRef<SearchHandle, SearchProps>(
           value={searchValue}
           className="w-full outline-none border h-12 rounded-md px-2 text-md focus:border-gray-600 focus:border-2 text-gray-800"
           onKeyDown={onKeyDown}
-          onChange={onChange}
           autoFocus={true}
+          onChange={(e) => onChange(e.target.value)}
         />
       </div>
     )

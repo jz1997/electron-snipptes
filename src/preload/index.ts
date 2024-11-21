@@ -3,6 +3,9 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { KeymapType } from '@main/manager/keymap'
 import { Category } from '@main/db/entites/category'
 import { Content } from '@main/db/entites/content'
+import { EverythingParams, EverythingResponse } from '@main/api/everything'
+import { Result } from '@main/db/entites/common'
+import { CommandType } from '@main/manager/Command'
 
 // Custom APIs for renderer
 const api = {
@@ -47,6 +50,14 @@ const api = {
   },
   updateContent: (content: Content) => {
     return ipcRenderer.invoke('update-content', content)
+  },
+  findFile: (
+    params?: EverythingParams | Record<string, any>
+  ): Promise<Result<EverythingResponse>> => {
+    return ipcRenderer.invoke('find-file', params)
+  },
+  doCommand: (type: CommandType, params?: any): Promise<Result<any>> => {
+    return ipcRenderer.invoke('do-command', type, params)
   }
 }
 

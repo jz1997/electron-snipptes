@@ -1,12 +1,18 @@
 import { ipcMain, IpcMainInvokeEvent } from 'electron'
 import { Result } from '../entites/common'
 import contentRepository from '../repositories/content-repository'
-import { Content } from '../entites/content'
+import { Content, ContentType } from '../entites/content'
 import categoryRepository from '../repositories/category-repository'
 
 ipcMain.handle('find-all-content', (_event: IpcMainInvokeEvent, params: Map<string, any>) => {
   try {
-    const contents = contentRepository.findAll(params).map((c) => fillCategory(c))
+    const contents = contentRepository
+      .findAll(params)
+      .map((c) => {
+        c.type = ContentType.URL
+        return c
+      })
+      .map((c) => fillCategory(c))
     return Result.success(contents)
   } catch (error) {
     console.log(error)

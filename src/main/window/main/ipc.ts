@@ -33,4 +33,8 @@ export const registerIpc = (win: BrowserWindow) => {
   ipcMain.on('open-link-in-browser', (_event: IpcMainEvent, url: string) => {
     shell.openExternal(url)
   })
+
+  ipcMain.on('open-path', (_event: IpcMainEvent, path: string) => {
+    shell.openPath(path)
+  })
 }

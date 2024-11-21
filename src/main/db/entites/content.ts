@@ -1,5 +1,22 @@
 import { Category } from './category'
 
+export enum ContentType {
+  URL = 'url',
+  FILE = 'file',
+  FOLDER = 'folder',
+  UNKNOWN = 'unknown'
+}
+
+export function parseContentType(type?: string): ContentType {
+  const matchEntries = Object.entries(ContentType).filter((entry) => {
+    return ContentType[entry[0]] === type
+  })
+  if (matchEntries.length > 0) {
+    return matchEntries[0][1]
+  }
+  return ContentType.UNKNOWN
+}
+
 export interface Content {
   id?: number | bigint
   categoryId?: number | bigint
@@ -10,6 +27,7 @@ export interface Content {
 
   // extra properties begin
   category?: Category
+  type?: ContentType
 }
 
 export enum ContentOpenType {
