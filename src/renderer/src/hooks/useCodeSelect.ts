@@ -46,7 +46,7 @@ export default () => {
     setSearchValue('')
   }
 
-  const scrollToActive = (index) => {
+  const scrollToActive = (index: number) => {
     if (!resultRef.current) {
       return
     }
@@ -137,7 +137,11 @@ export default () => {
   // 鼠标选中
   const handleMouseSelect = (result: Content, index: number) => {
     setCurrentIndex(index)
-    copyToClipboard(result)
+    if (result.type === ContentType.COMMAND) {
+      setSearchValue(result.title || '')
+    } else {
+      openWithDefaultType(result)
+    }
   }
 
   // 方向键选中

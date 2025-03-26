@@ -28,6 +28,7 @@ declare global {
         params?: EverythingParams | Record<string, any>
       ) => Promise<Result<EverythingResponse>>
       doCommand: (type: CommandType, params?: any) => Promise<Result<any>>
+      getCommand: (type?: CommandType) => AbstractCommand<any, any> | null
     }
   }
 }

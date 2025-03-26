@@ -1,10 +1,13 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createWindow } from './window/main/window'
 import './window/main/index'
 import './db'
 import './api'
 import './manager/command-ipc'
+import './manager/command'
+import { CommandManager } from './manager/command'
+CommandManager.shell = shell
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')

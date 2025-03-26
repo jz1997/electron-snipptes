@@ -1,11 +1,12 @@
-import { KeyboardEvent } from 'react'
+import { KeyboardEvent, useEffect, useState } from 'react'
 import { useStore } from '@renderer/store'
 import { Result } from '@main/db/entites/common'
 import { Content, ContentType, parseContentType } from '@main/db/entites/content'
-import { AbstractCommand, CommandType } from '@main/manager/command'
+import { CommandType } from '@main/manager/command'
 import useMessage from './useMessage'
 import { EverythingFile, EverythingResponse } from '@main/api/everything'
 import { parseCommand } from '../../../common/utils/command-utils'
+import AbstractCommand from '@main/manager/abstract-command'
 
 export default () => {
   const { errorMsg } = useMessage()
@@ -18,6 +19,14 @@ export default () => {
       setResult: (state) => state.setResult
     }
   })
+  const [currentCommand, setCurrentCommand] = useState<AbstractCommand<any, any> | null>(null)
+
+  useEffect(() => {
+    const command: CommandType | undefined = parseCommand((searchValue || '').toUpperCase())
+    window.api.getCommand(command).then((res) => {
+      setCurrentCommand(res)
+    })
+  }, [searchValue])
 
   const onChange = async (value: string) => {
     setSearchValue(value)
@@ -44,6 +53,8 @@ export default () => {
               errorMsg({ description: result.message })
             }
           })
+      } else if (command === CommandType.SEARCH) {
+        setResult([])
       }
     } else {
       const commands = await window.electron.ipcRenderer.invoke('get-command-list', value)
@@ -65,60 +76,51 @@ export default () => {
     }
   }
 
-  const doSearch = () => {
-    const value: string = searchValue
-    if (value === undefined || value === '') {
-      setResult([])
-      return
-    }
-
-    // 如果是命令
-    if (value.toUpperCase().startsWith(CommandType.FIND_FILE)) {
-      const fileName = value.substring(CommandType.FIND_FILE.length + 1)
-      window.api
-        .doCommand(CommandType.FIND_FILE, {
-          s: fileName,
-          c: 100
-        })
-        .then((result: Result<EverythingResponse>) => {
-          if (result.success) {
-            const results = (result.data?.results || []).map((file: EverythingFile): Content => {
-              return {
-                title: file.name,
-                content: file.path,
-                type: parseContentType(file.type)
-              }
-            })
-            setResult(results)
-          } else {
-            errorMsg({ description: result.message })
-          }
-        })
-    } else {
-      const params = new Map<string, any>([['title', value]])
-      window.api.findAllContent(params).then((r: Result<Content[]>) => {
-        if (r.success && r.data) {
-          setResult(r.data)
-        } else {
-          setResult([])
-        }
-      })
-    }
-  }
-
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault()
       return false
     } else if (e.key === 'Enter') {
+      const command: CommandType | undefined = parseCommand(searchValue || '')
+      if (command === CommandType.SEARCH) {
+        const keyword: string = searchValue.substring(CommandType.SEARCH.length + 1)
+        window.api.doCommand(CommandType.SEARCH, keyword).then(() => {})
+        window.api.hideWindow()
+      }
+    } else if (e.key === 'Backspace') {
+      if (searchValue.trim().toUpperCase() === currentCommand?.command) {
+        setCurrentCommand(null)
+        setSearchValue('')
+      }
     }
     return true
   }
 
+  const formatSearchValue = (): string => {
+    if (!searchValue) {
+      return ''
+    }
+
+    if (!currentCommand) {
+      return searchValue
+    }
+
+    if (
+      searchValue.startsWith(currentCommand.command.toUpperCase()) ||
+      searchValue.startsWith(currentCommand.command.toLowerCase())
+    ) {
+      return searchValue.substring(currentCommand.command.length + 1)
+    }
+
+    return searchValue ?? ''
+  }
+
   return {
     onKeyDown,
+    currentCommand,
     onChange,
     searchValue,
-    setSearchValue
+    setSearchValue,
+    formatSearchValue
   }
 }

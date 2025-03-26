@@ -8,11 +8,11 @@ export interface SearchHandle {
   clear: () => void
 }
 
-interface SearchProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface SearchProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 const Search = forwardRef<SearchHandle, SearchProps>(
   ({ className, ...props }: SearchProps, ref) => {
-    const { onKeyDown, onChange, searchValue, setSearchValue } = useSearch()
+    const { onKeyDown, onChange, searchValue, setSearchValue, currentCommand, formatSearchValue } = useSearch()
     const inputRef = React.useRef<HTMLInputElement>(null)
 
     const focusInput = () => {
@@ -49,14 +49,35 @@ const Search = forwardRef<SearchHandle, SearchProps>(
         className={cn('w-full bg-white flex flex-row items-center gap-x-2', className)}
         {...props}
       >
-        <input
-          ref={inputRef}
-          value={searchValue}
-          className="w-full outline-none border h-12 rounded-md px-2 text-md focus:border-gray-600 focus:border-2 text-gray-800"
-          onKeyDown={onKeyDown}
-          autoFocus={true}
-          onChange={(e) => onChange(e.target.value)}
-        />
+        {
+          currentCommand &&
+          <div className="h-10 bg-neutral-800 rounded-md leading-10 px-4 text-center text-nowrap text-white text-sm">
+            {currentCommand.name}
+          </div>
+        }
+
+        {
+          !currentCommand &&
+          <input
+            ref={inputRef}
+            value={searchValue}
+            className="w-full outline-none border h-10 rounded-md px-2 text-md focus:border-gray-600 focus:border-2 text-gray-800"
+            onKeyDown={onKeyDown}
+            autoFocus={true}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        }
+        {
+          currentCommand &&
+          <input
+            ref={inputRef}
+            value={formatSearchValue()}
+            className="w-full outline-none border h-10 rounded-md px-2 text-md focus:border-gray-600 focus:border-2 text-gray-800"
+            onKeyDown={onKeyDown}
+            autoFocus={true}
+            onChange={(e) => onChange(currentCommand.command + " " + e.target.value)}
+          />
+        }
       </div>
     )
   }

@@ -6,6 +6,7 @@ import { Content } from '@main/db/entites/content'
 import { EverythingParams, EverythingResponse } from '@main/api/everything'
 import { Result } from '@main/db/entites/common'
 import { CommandType } from '@main/manager/command'
+import AbstractCommand from '@main/manager/abstract-command'
 
 // Custom APIs for renderer
 const api = {
@@ -58,6 +59,9 @@ const api = {
   },
   doCommand: (type: CommandType, params?: any): Promise<Result<any>> => {
     return ipcRenderer.invoke('do-command', type, params)
+  },
+  getCommand: (type?: CommandType): Promise<AbstractCommand<any, any>> => {
+    return ipcRenderer.invoke('get-command', type)
   }
 }
 

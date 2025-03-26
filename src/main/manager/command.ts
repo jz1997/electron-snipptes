@@ -1,8 +1,10 @@
-import { EverythingParams, EverythingResponse, findFile } from '../api/everything'
-import { Result } from '../db/entites/common'
-
+import AbstractCommand from './abstract-command'
+import SearchCommand from './search-command'
+import EveryThingFindFileCommand from './everything-findfile-command'
+import { Shell } from 'electron'
 export enum CommandType {
-  FIND_FILE = 'FIND_FILE'
+  FIND_FILE = 'FIND_FILE',
+  SEARCH = 'SEARCH'
 }
 
 export class CommandManager {
@@ -10,78 +12,34 @@ export class CommandManager {
     string,
     AbstractCommand<any, any>
   >()
-  constructor() {
+  private static _shell: Shell
+
+  static {
     this.init()
   }
 
-  private init() {
+  private static init() {
     CommandManager.COMMANDS.set(
       CommandType.FIND_FILE,
       new EveryThingFindFileCommand('查询文件', CommandType.FIND_FILE)
     )
+    CommandManager.COMMANDS.set(
+      CommandType.SEARCH,
+      new SearchCommand('浏览器搜索', CommandType.SEARCH)
+    )
   }
 
-  public get(command: CommandType): AbstractCommand<any, any> {
+  public static get(command: CommandType): AbstractCommand<any, any> {
     return CommandManager.COMMANDS.get(command.toString())!
   }
 
-  public list(): Array<AbstractCommand<any, any>> {
+  public static list(): Array<AbstractCommand<any, any>> {
     return Array.from(CommandManager.COMMANDS.values())
   }
-}
-
-export interface DoCommand<T, R> {
-  execute(params: T): Promise<R>
-}
-
-export abstract class AbstractCommand<T, R> implements DoCommand<T, R> {
-  private _name: string
-  private _command: string
-  private _description?: string
-
-  constructor(name: string, command: string, description?: string) {
-    this._name = name
-    this._command = command
-    this._description = description
+  public static set shell(shell: Shell) {
+    CommandManager._shell = shell
   }
-  abstract execute(params: T): Promise<R>
-
-  public get name(): string {
-    return this._name
-  }
-  public get command(): string {
-    return this._command
-  }
-  public get description(): string | undefined {
-    return this._description
-  }
-
-  public toJSON(): Record<string, any> {
-    return {
-      name: this._name,
-      command: this._command,
-      description: this._description
-    }
-  }
-}
-
-export class EveryThingFindFileCommand extends AbstractCommand<
-  EverythingParams,
-  Result<EverythingResponse>
-> {
-  constructor(name: string, command: string, description?: string) {
-    super(name, command, description)
-  }
-  execute(params: EverythingParams): Promise<Result<EverythingResponse>> {
-    return new Promise<Result<any>>((resolve, reject) => {
-      findFile(params)
-        .then((data: EverythingResponse) => {
-          resolve(Result.success(data))
-        })
-        .catch((e) => {
-          console.log(e)
-          reject(Result.fail(e.message))
-        })
-    })
+  public static get shell() {
+    return CommandManager._shell
   }
 }
